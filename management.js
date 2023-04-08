@@ -17,9 +17,8 @@ const registerBackButton = document.getElementById("backFromRegisterButton");
 
 //Users dictionary
 const users = {
-  defaultUser: {
-    username: "defaultUser",
-    password: "password"
+  s: {
+    password: "s"
   }
 };
 
@@ -51,7 +50,6 @@ function loginUser(username, password) {
     loginUsername.value = "";
     loginPassword.value = "";
   }
-  sleep(2000);
 }
 
 //Register page methods

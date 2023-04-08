@@ -105,6 +105,7 @@ class Player extends SpaceShip {
 var canvas;
 var ctx;
 const spaceBetweenEnemies = 30;
+const backgroundColor = '#000000'
 var enemies = [];
 var player;
 var keysDown = {};
@@ -119,7 +120,7 @@ function main() {
 	var now = Date.now();
 	var delta = now - then;
 	
-	updatePositions(delta / 1000);
+	update(delta / 1000);
 	draw();	
 	
 	then = now;
@@ -127,11 +128,11 @@ function main() {
 
 function setupGame()
 {
-	
+	console.log("setupGame strated.");
 	// Get the canvas
-	canvas = document.getElementById("theCanvas");
+	canvas = document.getElementById("gameCanvas");
 	ctx = canvas.getContext("2d");
-
+    document.getElementById("startGameButton").addEventListener("click", newGame, false );
 
 	// Game objects
 	player = new Player(
@@ -167,7 +168,7 @@ function setupGame()
 
 function newGame()
 {
-    timeleft = 
+    console.log("newGame Started.");
 	then = Date.now();
 	intervalTimer = setInterval(main, 1); // Execute as fast as possible
 }
@@ -195,6 +196,9 @@ function update(modifier) {
             player.update(5, 0)
 		    //player.x += player.speed * modifier;	
 	}
+
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     //draw player
     player.draw(ctx)

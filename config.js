@@ -1,5 +1,6 @@
 const startGameButton = document.getElementById("startGameButton")
 const fireButtonInput = document.getElementById("fireButtonInput")
+const gameDiv = document.getElementById("gameDiv")
 const timeLimit = document.getElementById("timeLimit")
 var fireButton
 var gameTimeLimit
@@ -9,4 +10,5 @@ var gameTimeLimit
 startGameButton.addEventListener("click", function() {
     fireButton = fireButtonInput.value;
     gameTimeLimit = timeLimit
+    giveFocusToDiv(gameDiv)
 });
