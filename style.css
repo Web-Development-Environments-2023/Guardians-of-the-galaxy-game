@@ -21,9 +21,9 @@
   .button.dark {
     background-color: #222;
   }
-  body {
+  /* body {
     background-color: #000;
-  }
+  } */
 
   #loginDiv {
     background-color: #222;
@@ -33,3 +33,7 @@
     margin: 20px;
     width: 400px;
   }
+
+  /* label{
+    color:white;
+  } */
