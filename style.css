@@ -1,6 +1,6 @@
 .logo {
-    width: 200px;
-    height: 100px;
+    width: 1000px;
+    height: 200px;
     background-image: url('logo.jpg');
     background-size: contain;
     background-repeat: no-repeat;
@@ -17,4 +17,19 @@
     margin-top: 20px;
     margin-right: 20px;
     cursor: pointer;
+  }
+  .button.dark {
+    background-color: #222;
+  }
+  body {
+    background-color: #000;
+  }
+
+  #loginDiv {
+    background-color: #222;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px;
+    width: 400px;
   }
