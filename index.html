@@ -15,7 +15,7 @@
         <button class="button" id="registerButton">Register</button>
         </div>
 
-        <div id="loginDiv" style="display: none;">
+        <div id="loginDiv" class="login-bg" style="display: none;">
         <h2>Login</h2>
         <form>
             <label for="username">Username:</label>
@@ -26,7 +26,7 @@
             <input type="password" id="loginPassword" name="password" required>
             <br>
         
-            <input type="submit" value="Login" id="loginSubmit">
+            <button type="submit" id="loginSubmit">Login</button>
 
         <br>
         <br>
@@ -66,7 +66,7 @@
         <input type="password" id="repeat-password" name="repeat-password" required>
         <br>
         
-        <input type="submit" value="Register" id="registerSubmit">
+        <button type="submit" id="registerSubmit">Register</button>
 
         <br>
         <br>
@@ -75,7 +75,7 @@
       </form>
     </div>
     
-    <div id="configDiv" style="display: block;">
+    <div id="configDiv" style="display: none;">
       <label for="fireButtonInput">Choose a button to fire at enemies:</label>
       <input type="text" id="fireButtonInput" name="fireButtonInput" maxlength="1" pattern="[A-Za-z\s]" required>
       <br>
