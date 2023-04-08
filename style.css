@@ -1,6 +1,6 @@
 .logo {
-    width: 1000px;
-    height: 200px;
+    width: 700px;
+    height: 150px;
     background-image: url('logo.jpg');
     background-size: contain;
     background-repeat: no-repeat;
@@ -33,6 +33,7 @@
     margin: 20px;
     width: 400px;
   }
+  
 
   /* label{
     color:white;

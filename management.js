@@ -1,96 +1,64 @@
-const managementDiv = document.getElementById("managementDiv");
-
+//Main page attributes
+const mainDiv = document.getElementById("mainDiv");
 const loginButton = document.getElementById("loginButton");
-const loginDiv = document.getElementById("loginDiv");
-
 const registerButton = document.getElementById("registerButton");
+
+//Login page attributes
+const loginDiv = document.getElementById("loginDiv");
+const loginBackButton = document.getElementById("backFromLoginButton");
+var loginUsername = document.getElementById("loginUsername");
+var loginPassword = document.getElementById("loginPassword");
+var loginSubmit = document.getElementById("loginSubmit");
+
+//Register page attributes
 const registerDiv = document.getElementById("registerDiv");
+const registerBackButton = document.getElementById("backFromRegisterButton");
+
+//Users dictionary
+const users = {
+  defaultUser: {
+    username: "defaultUser",
+    password: "password"
+  }
+};
 
 function giveFocusToDiv(divToFocus) {
-  appDivs = ["loginDiv", "registerDiv", "managementDiv"] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
+  appDivs = ["loginDiv", "registerDiv", "mainDiv"] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
   for(let i=0; i<appDivs.length; i++) {
       document.getElementById(appDivs[i]).style.display = "none"
   }
-  divToFocus.style.display = "block"
+  divToFocus.style.display="block"
 }
 
+//Main page methods
 loginButton.addEventListener("click", function() {giveFocusToDiv(loginDiv)}, false);
-
 registerButton.addEventListener("click", function() {giveFocusToDiv(registerDiv)}, false);
 
-// window.addEventListener("load", setupGame, false);
-
-// // called when the app first launches
-// function setupGame()
-// {
-//   // Get the canvas
-//   canvas = document.getElementById("gameCanvas");
-//   ctx = canvas.getContext("2d");
-
-//   //sound
-//   //obj = document.getElementById( "targetSound" );
-//   // Background image
-//   //bgImage = new Image();
-//   //bgImage.src = "images/background.png";
-//   // Hero image
-//   //heroImage = new Image();
-//   //heroImage.src = "images/hero.png";
-//   // Monster image
-//   //monsterImage = new Image();
-//   //monsterImage.src = "images/monster.png";
-//   // Game objects
+//Login page methods
+loginBackButton.addEventListener("click", function() {giveFocusToDiv(mainDiv)}, false);
+// loginSubmit.addEventListener("click", function() {loginUser(loginUsername.value, loginPassword.value)})
+loginSubmit.addEventListener("click", function() {console.log("hi hi")});
 
 
-//   //hero = {speed: 256 }; // movement in pixels per second
+function loginUser(username, password) {
+  if (users[username] && users[username].password === password) {
+    console.log("Login successful.");
+  } else {
+    console.log("Invalid username or password.");
+  }
+}
 
-//   // Handle keyboard controls
-//   keysDown = {};
-// }
+//Register page methods
+registerBackButton.addEventListener("click", function() {giveFocusToDiv(mainDiv)}, false);
 
-  // Check for keys pressed where key represents the keycode
-
-
-
-// var canvas;
-// const loginButton = document.getElementById("loginButton");
-// const loginDiv = document.getElementById("loginDiv");
-
-
-// window.addEventListener("load", setupGame, false);
-
-// // called when the app first launches
-// function setupGame()
-// {
-	
-// 	// Get the canvas
-// 	canvas = document.getElementById("theCanvas");
-// 	ctx = canvas.getContext("2d");
-// 	 // start a new game when user clicks Start Game button
-// 	 loginButton.addEventListener("click", function() {
-// 		loginDiv.style.display = "block";
-// 	  });
-
-//   	//sound
-// 	//obj = document.getElementById( "targetSound" );
-// 	// Background image
-// 	//bgImage = new Image();
-// 	//bgImage.src = "images/background.png";
-// 	// Hero image
-// 	//heroImage = new Image();
-// 	//heroImage.src = "images/hero.png";
-// 	// Monster image
-// 	//monsterImage = new Image();
-// 	//monsterImage.src = "images/monster.png";
-// 	// Game objects
-
-
-// 	//hero = {speed: 256 }; // movement in pixels per second
-
-// 	// Handle keyboard controls
-// 	keysDown = {};
-
-// 	// Check for keys pressed where key represents the keycode captured
-// 	addEventListener("keydown", function (e) {keysDown[e.keyCode] = true;}, false);
-// 	addEventListener("keyup", function (e) {delete keysDown[e.keyCode];}, false);
-
-// }
+function registerUser(username, password) {
+  if (users[username]) {
+    console.log("User already exists.");
+  } else {
+    users[username] = {
+      username: username,
+      password: password
+    };
+    console.log("User registered successfully.");
+  }
+}
