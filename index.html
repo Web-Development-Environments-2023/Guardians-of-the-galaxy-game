@@ -8,7 +8,7 @@
 
   <body>
 
-    <div id="managementDiv">
+    <div id="mainDiv">
       <div class="logo"></div>
       <canvas id="gameCanvas"></canvas>
       <button class="button" id="loginButton">Login</button>
@@ -19,36 +19,25 @@
       <h2>Login</h2>
       <form>
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+        <input type="text" id="loginUsername" name="username" required>
         <br>
     
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="loginPassword" name="password" required>
         <br>
     
-        <input type="submit" value="Login">
+        <input type="submit" value="Login" id="loginSubmit">
+
+        <br>
+        <br>
+        <br>
+        <button id="backFromLoginButton">Back</button>
       </form>
     </div>
 
     <div id="registerDiv" style="display: none;">
       <h2>Register</h2>
       <form>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <br>
-    
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
-    
-        <label for="repeat-password">Repeat Password:</label>
-        <input type="password" id="repeat-password" name="repeat-password" required>
-        <br>
-    
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <br>
-    
         <label for="first-name">First Name:</label>
         <input type="text" id="first-name" name="first-name" required>
         <br>
@@ -60,8 +49,29 @@
         <label for="date-of-birth">Date of Birth:</label>
         <input type="date" id="date-of-birth" name="date-of-birth" required>
         <br>
+
+                <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br>
+
+        <label for="username">Username:</label>
+        <input type="text" id="registerUsername" name="username" required>
+        <br>
     
-        <input type="submit" value="Register">
+        <label for="password">Password:</label>
+        <input type="password" id="registerPassword" name="password" required>
+        <br>
+    
+        <label for="repeat-password">Repeat Password:</label>
+        <input type="password" id="repeat-password" name="repeat-password" required>
+        <br>
+        
+        <input type="submit" value="Register" id="registerSubmit">
+
+        <br>
+        <br>
+        <br>
+        <button id="backFromRegisterButton">Back</button>
       </form>
     </div>
       
