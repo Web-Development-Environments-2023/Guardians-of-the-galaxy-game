@@ -9,6 +9,6 @@ var gameTimeLimit
 // start a new game when user clicks Start Game button
 startGameButton.addEventListener("click", function() {
     fireButton = fireButtonInput.value;
-    gameTimeLimit = timeLimit
+    gameTimeLimit = timeLimit * 60 * 1000 // Minutes to miliseconds
     giveFocusToDiv(gameDiv)
 });

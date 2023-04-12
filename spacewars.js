@@ -25,14 +25,6 @@ class GameObject {
                 && this.y + this.height > obj.y);
     }
 }
-class Bullet extends GameObject {
-    constructor(x, y, width, height, color, dx, dy) {
-        super(x, y, width, height, color);
-
-        this.dx = dx;
-        this.dy = dy;
-    }
-}
 
 class SpaceShip extends GameObject {
     constructor(x, y, width, height, color, canvasHeight) {
@@ -54,7 +46,7 @@ class SpaceShip extends GameObject {
         // Draw the spaceship's bullets.
         for (var i = 0; i < this.bullets.length; i++) {
             this.bullets[i].draw(ctx);
-            this.bullets[i].update(0, 0);
+            this.bullets[i].update();
 
             // Check if the bullet is out of bounds.
             if (this.bullets[i].y < 0 || this.bullets[i].y > this.canvasHeight) {
@@ -101,6 +93,19 @@ class Player extends SpaceShip {
         }
     }
 }
+class Bullet extends GameObject {
+    constructor(x, y, width, height, color, dx, dy) {
+      super(x, y, width, height, color);
+      // Set the bullet's x and y directions.
+      this.dx = dx;
+      this.dy = dy;
+    }
+    
+    update() {
+        this.x += this.dx;
+        this.y += this.dy; 
+    }
+  }
 
 var canvas;
 var ctx;
@@ -110,18 +115,23 @@ var enemies = [];
 var player;
 var keysDown = {};
 var intervalTimer;
-var timeLeft;	
+var playerScore;
 var enemyDirection = 1;
 var enemyStep = 5;
+var lastShot = Date.now();
+var gameStartTime;
 window.addEventListener("load", setupGame, false);
 
 
 function main() {
 	var now = Date.now();
 	var delta = now - then;
-	
-	update(delta / 1000);
-	draw();	
+    gameTimeLimit -= delta;
+    gameTick(delta / 1000);
+
+    if (gameTimeLimit <= 0) {
+        endGame();
+    }
 	
 	then = now;
 }
@@ -133,7 +143,6 @@ function setupGame()
 	canvas = document.getElementById("gameCanvas");
 	ctx = canvas.getContext("2d");
     document.getElementById("startGameButton").addEventListener("click", newGame, false );
-
 	// Game objects
 	player = new Player(
         canvas.width / 2 - 50,
@@ -160,46 +169,52 @@ function setupGame()
 	keysDown = {};
 
 	// Check for keys pressed where key represents the keycode captured
-	addEventListener("keydown", function (e) {keysDown[e.keyCode] = true;}, false);
+	addEventListener("keydown", function (e) {keysDown[e.key] = true;}, false);
 
-	addEventListener("keyup", function (e) {delete keysDown[e.keyCode];}, false);
+	addEventListener("keyup", function (e) {delete keysDown[e.key];}, false);
 
 }
 
 function newGame()
 {
     console.log("newGame Started.");
+    playerScore = 0;
 	then = Date.now();
+    gameStartTime = Date.now();
 	intervalTimer = setInterval(main, 1); // Execute as fast as possible
 }
 
-
-function update(modifier) {
+function gameTick(modifier) {
     //check if player moves
-	if ((38 in keysDown) ) { // Player holding up
-		if(player.y>=20)
+	if (("ArrowUp" in keysDown) ) { // Player holding up
+		if(player.y>=canvas.height*0.6)
             player.update(0, -5)
 		    //player.y -= player.speed * modifier;
 	}
-	if ((40 in keysDown) ) { // Player holding down
-		if(player.y<=440)
+	if (('ArrowDown' in keysDown) ) { // Player holding down
+		if(player.y<=canvas.height - 50)
             player.update(0, 5)
 		    //player.y += player.speed * modifier;
 	}
-	if (37 in keysDown) { // Player holding left
-		if(player.x>=20)
+	if ('ArrowLeft' in keysDown) { // Player holding left
+		if(player.x>=50)
             player.update(-5, 0)
 		    //player.x -= player.speed * modifier;
 	}
-	if (39 in keysDown) { // Player holding right
-		if(player.x<=492)
+	if ('ArrowRight' in keysDown) { // Player holding right
+		if(player.x<=canvas.width - 50)
             player.update(5, 0)
 		    //player.x += player.speed * modifier;	
 	}
+    
 
     ctx.fillStyle = backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+    shootingDelta = Date.now() - lastShot
+    if (fireButton in keysDown && shootingDelta > 350) { // Player holding shoot
+		player.shoot(0, -5)
+        lastShot = Date.now()
+	}
     //draw player
     player.draw(ctx)
     
@@ -208,62 +223,63 @@ function update(modifier) {
         enemies[i].draw(ctx);
         enemies[i].update(enemyDirection, 0);
     }
-    if (enemyDirection == 1)
-        {
-          // Find the enemy closest to the right side of the screen
-          var closestToRightSideEnemy = enemies[0];
-          for (var i = 1; i < enemies.length; i++) {
-            if (enemies[i].x > closestToRightSideEnemy.x) {
-              closestToRightSideEnemy = enemies[i];
-            }
-          }
-
-          // Check if the enemy closest to the right side of 
-          // the screen has reached the right side of the screen.
-          if (closestToRightSideEnemy.x + 
-              closestToRightSideEnemy.width > canvas.width) {
-            // Reverse the direction of the enemies.
-            enemyDirection = -1;            
-            // Move the enemies down.
-            for (var i = 0; i < enemies.length; i++) {
-              enemies[i].update(0, enemyStep);
-            }
-          }          
-        }
-        else if (enemyDirection == -1)
-        {
-          // Find the enemy closest to the left side of the screen
-          var closestToLeftSideEnemy = enemies[0];
-          for (var i = 1; i < enemies.length; i++) {
-            if (enemies[i].x < closestToLeftSideEnemy.x) {
-              closestToLeftSideEnemy = enemies[i];
-            }
-          }
-
-          // Check if the enemy closest to the left side of 
-          // the screen has reached the left side of the screen.
-          if (closestToLeftSideEnemy.x < 0) {
-            // Reverse the direction of the enemies.
-            enemyDirection = 1;
-            // Move the enemies down.
-            for (var i = 0; i < enemies.length; i++) {
-              enemies[i].update(0, enemyStep);
-            }
-          }
-        }
-
-	
-
-	--timeLeft;
-	 // if the timer reached zero
-    if (timeLeft <= 0)
+    if (enemyDirection == 1 && enemies.length > 0)
     {
-        stopTimer();
-        //TODO things that happen when time is up
-    } 
-}
+        // Find the enemy closest to the right side of the screen
+        var closestToRightSideEnemy = enemies[0];
+        for (var i = 1; i < enemies.length; i++) {
+        if (enemies[i].x > closestToRightSideEnemy.x) {
+            closestToRightSideEnemy = enemies[i];
+        }
+        }
 
-function stopTimer()
+        // Check if the enemy closest to the right side of 
+        // the screen has reached the right side of the screen.
+        if (closestToRightSideEnemy.x + 
+            closestToRightSideEnemy.width > canvas.width) {
+        // Reverse the direction of the enemies.
+        enemyDirection = -1;            
+        }          
+    }
+    else if (enemyDirection == -1)
+    {
+        // Find the enemy closest to the left side of the screen
+        var closestToLeftSideEnemy = enemies[0];
+        for (var i = 1; i < enemies.length; i++) {
+        if (enemies[i].x < closestToLeftSideEnemy.x) {
+            closestToLeftSideEnemy = enemies[i];
+        }
+        }
+
+        // Check if the enemy closest to the left side of 
+        // the screen has reached the left side of the screen.
+        if (closestToLeftSideEnemy.x < 0) 
+        enemyDirection = 1;
+    }
+    // Check if player bullet collides with enemy
+    for (var i = 0; i < player.bullets.length; i++) {
+        for (var j = 0; j < enemies.length; j++) {
+            if (enemies[j].collidesWith(player.bullets[i])) {
+                playerHitEnemy(j,i);
+                
+            break;
+            }
+        }
+      }
+}
+function playerHitEnemy(enemyIndex,bulletIndex) {
+    enemy = enemies[enemyIndex];
+    enemyLineInFormation = (enemy.y / spaceBetweenEnemies) + 2; // From the bottom.
+    scoreToAdd = enemyLineInFormation * 5;
+    playerScore += scoreToAdd;
+
+    // Remove hit enemy and the bullet.
+    enemies.splice(enemyIndex, 1);
+    player.bullets.splice(bulletIndex, 1);
+    if (enemies.length == 0)
+        endGame();
+}
+function endGame()
 {
    window.clearInterval( intervalTimer ); //???
 }
