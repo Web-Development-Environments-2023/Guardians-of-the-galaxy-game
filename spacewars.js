@@ -1,11 +1,12 @@
 
 class GameObject {
-    constructor(x, y, height, width, color) {
+    constructor(x, y, height, width, color, speed) {
         this.x = x
         this.y = y
         this.height = height
         this.width = width
         this.color = color
+        this.speed = speed
     }
 
     draw(ctx) {
@@ -27,30 +28,25 @@ class GameObject {
 }
 
 class SpaceShip extends GameObject {
-    constructor(x, y, width, height, color, canvasHeight) {
-        super(x, y, width, height, color);
-        // Set canvas height.
+    constructor(x, y, width, height, color, speed,
+                bulletColor, canvasHeight) {
+        super(x, y, width, height, color, speed);
         this.canvasHeight = canvasHeight;
-        // Set the spaceship's bullet size.
         this.bulletWidth = 4;
         this.bulletHeight = 8;
-        // Set the spaceship's bullet color.
-        this.bulletColor = "#FF0000";
-        // Bullets fired by the spaceship
+        this.color = color;
+        this.bulletColor = bulletColor;
         this.bullets = [];
     }
 
-    // Override the draw method to also draw the spaceship's bullets.
     draw(ctx) {
         super.draw(ctx);
-        // Draw the spaceship's bullets.
         for (var i = 0; i < this.bullets.length; i++) {
             this.bullets[i].draw(ctx);
             this.bullets[i].update();
 
-            // Check if the bullet is out of bounds.
-            if (this.bullets[i].y < 0 || this.bullets[i].y > this.canvasHeight) {
-                // Remove the bullet from the array.
+            if (this.bullets[i].y < 0 || 
+                            this.bullets[i].y > this.canvasHeight) {
                 this.bullets.splice(i, 1);
             }
         }
@@ -70,32 +66,15 @@ class SpaceShip extends GameObject {
     }
 }
 class Player extends SpaceShip {
-    constructor(x, y, width, height, color, canvasHeight, canvasWidth) {
-        super(x, y, width, height, color, canvasHeight);
+    constructor(x, y, width, height, color, speed,
+                bulletColor, canvasHeight, canvasWidth) {
+        super(x, y, width, height, color, speed, bulletColor, canvasHeight);
         this.canvasWidth = canvasWidth;
-    }
-
-    // Update the player's position
-    update(dx, dy) {
-        super.update(dx, dy);
-
-        // Keep the player within the canvas TODO ADD MAX HEIGHT
-        if (this.x < 0) {
-            this.x = 0;
-        } 
-        else if (this.x + this.width > this.canvasWidth) {
-            this.x = this.canvasWidth - this.width;
-        }
-        else if (this.y < 0)
-            this.y = 0;
-        else if (this.y > this.canvasHeight) { //TODO MAX HEIGHT FOR THE PLAYER
-            this.y = this.canvasHeight;
-        }
     }
 }
 class Bullet extends GameObject {
-    constructor(x, y, width, height, color, dx, dy) {
-      super(x, y, width, height, color);
+    constructor(x, y, width, height, color, speed, dx, dy) {
+      super(x, y, width, height, color, speed);
       // Set the bullet's x and y directions.
       this.dx = dx;
       this.dy = dy;
@@ -109,7 +88,6 @@ class Bullet extends GameObject {
 
 var canvas;
 var ctx;
-const spaceBetweenEnemies = 30;
 const backgroundColor = '#000000'
 var enemies = [];
 var player;
@@ -117,11 +95,22 @@ var keysDown = {};
 var intervalTimer;
 var playerScore;
 var enemyDirection = 1;
-var enemyStep = 5;
 var lastShot = Date.now();
 var gameStartTime;
-window.addEventListener("load", setupGame, false);
 
+// Defult Values - can be made modifiable in config. 
+var numOfEnemyLines = 4;
+var numOfEnemiesPerLine = 5;
+var spaceBetweenEnemies = 50;
+var enemyColor = '#00FF00';
+var playerColor = '#0099CC';
+var playerBulletColor = '#FF0000';
+var enemyBulletColor = '#FF0000';
+var playerSpeed = 5;
+var enemySpeed = 5;
+var bulletSpeed = 5;
+
+window.addEventListener("load", setupGame, false);
 
 function main() {
 	var now = Date.now();
@@ -145,23 +134,29 @@ function setupGame()
     document.getElementById("startGameButton").addEventListener("click", newGame, false );
 	// Game objects
 	player = new Player(
-        canvas.width / 2 - 50,
-        canvas.height - 50,
-        20,
-        20,
-        '#0099CC',
+        canvas.width / 2 - 50, // starting x
+        canvas.height - 50, // starting y
+        20, // object's width
+        20, // object's height
+        playerColor, // color
+        playerSpeed,
+        playerBulletColor,
         canvas.height,
         canvas.width
     )
     
-    for (var i = 0; i < 4; i++) { //num of lines of enemies
-            for (var j = 0; j < 5; j++) { //num of enemies per line
+    // Create enemy objects with spacing between them.
+    for (var i = 0; i < numOfEnemyLines; i++) { 
+            for (var j = 0; j < numOfEnemiesPerLine; j++) { 
                 enemies.push(new SpaceShip(
                     spaceBetweenEnemies + j * spaceBetweenEnemies,
                     spaceBetweenEnemies + i * spaceBetweenEnemies,
                     20,
                     20,
-                    '#00FF00'
+                    enemyColor,
+                    enemySpeed,
+                    enemyBulletColor,
+                    canvas.height
             ));
             }
     }
@@ -181,56 +176,37 @@ function newGame()
     playerScore = 0;
 	then = Date.now();
     gameStartTime = Date.now();
-	intervalTimer = setInterval(main, 1); // Execute as fast as possible
+    // 1 ms execution time to make the canvas render fastest and cleanest
+	intervalTimer = setInterval(main, 1); 
 }
 
 function gameTick(modifier) {
-    //check if player moves
-	if (("ArrowUp" in keysDown) ) { // Player holding up
+    //check if player holds down movment keys
+	if (("ArrowUp" in keysDown) ) { 
 		if(player.y>=canvas.height*0.6)
             player.update(0, -5)
-		    //player.y -= player.speed * modifier;
 	}
-	if (('ArrowDown' in keysDown) ) { // Player holding down
+	if (('ArrowDown' in keysDown) ) { 
 		if(player.y<=canvas.height - 50)
             player.update(0, 5)
-		    //player.y += player.speed * modifier;
 	}
-	if ('ArrowLeft' in keysDown) { // Player holding left
-		if(player.x>=50)
+	if ('ArrowLeft' in keysDown) {
+		if(player.x>=20)
             player.update(-5, 0)
-		    //player.x -= player.speed * modifier;
 	}
-	if ('ArrowRight' in keysDown) { // Player holding right
+	if ('ArrowRight' in keysDown) { 
 		if(player.x<=canvas.width - 50)
             player.update(5, 0)
-		    //player.x += player.speed * modifier;	
 	}
     
-
-    ctx.fillStyle = backgroundColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    shootingDelta = Date.now() - lastShot
-    if (fireButton in keysDown && shootingDelta > 350) { // Player holding shoot
-		player.shoot(0, -5)
-        lastShot = Date.now()
-	}
-    //draw player
-    player.draw(ctx)
-    
-    // Draw enemies
-    for (var i = 0; i < enemies.length; i++) {
-        enemies[i].draw(ctx);
-        enemies[i].update(enemyDirection, 0);
-    }
     if (enemyDirection == 1 && enemies.length > 0)
     {
         // Find the enemy closest to the right side of the screen
         var closestToRightSideEnemy = enemies[0];
         for (var i = 1; i < enemies.length; i++) {
-        if (enemies[i].x > closestToRightSideEnemy.x) {
-            closestToRightSideEnemy = enemies[i];
-        }
+            if (enemies[i].x > closestToRightSideEnemy.x) {
+                closestToRightSideEnemy = enemies[i];
+            }
         }
 
         // Check if the enemy closest to the right side of 
@@ -246,26 +222,43 @@ function gameTick(modifier) {
         // Find the enemy closest to the left side of the screen
         var closestToLeftSideEnemy = enemies[0];
         for (var i = 1; i < enemies.length; i++) {
-        if (enemies[i].x < closestToLeftSideEnemy.x) {
-            closestToLeftSideEnemy = enemies[i];
-        }
+            if (enemies[i].x < closestToLeftSideEnemy.x) {
+                closestToLeftSideEnemy = enemies[i];
+            }
         }
 
         // Check if the enemy closest to the left side of 
         // the screen has reached the left side of the screen.
         if (closestToLeftSideEnemy.x < 0) 
-        enemyDirection = 1;
+            enemyDirection = 1;
     }
     // Check if player bullet collides with enemy
     for (var i = 0; i < player.bullets.length; i++) {
         for (var j = 0; j < enemies.length; j++) {
             if (enemies[j].collidesWith(player.bullets[i])) {
                 playerHitEnemy(j,i);
-                
-            break;
+                break;
             }
         }
-      }
+    }
+
+    shootingDelta = Date.now() - lastShot
+    if (fireButton in keysDown && shootingDelta > 350) { // Player holding shoot
+		player.shoot(0, -5)
+        lastShot = Date.now()
+	}
+
+    // draw canvas
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    //draw player
+    player.draw(ctx)
+    // Draw enemies
+    for (var i = 0; i < enemies.length; i++) {
+        enemies[i].draw(ctx);
+        enemies[i].update(enemyDirection, 0);
+    }
+
 }
 function playerHitEnemy(enemyIndex,bulletIndex) {
     enemy = enemies[enemyIndex];
