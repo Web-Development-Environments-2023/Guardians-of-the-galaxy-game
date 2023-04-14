@@ -51,7 +51,7 @@ class SpaceShip extends GameObject {
             }
         }
     }
-    
+     
     // A method used to fire bullets from a spaceship
     shoot(dx,dy) {
         this.bullets.push(new Bullet(
@@ -60,6 +60,7 @@ class SpaceShip extends GameObject {
             this.bulletWidth,
             this.bulletHeight,
             this.bulletColor,
+            enemySpeed,
             dx,
             dy
       ));
@@ -80,7 +81,7 @@ class Bullet extends GameObject {
       this.dy = dy;
     }
     
-    update() {
+    update(dx, dy) {
         this.x += this.dx;
         this.y += this.dy; 
     }
@@ -95,8 +96,16 @@ var keysDown = {};
 var intervalTimer;
 var playerScore;
 var enemyDirection = 1;
-var lastShot = Date.now();
+var lastShotTime;
 var gameStartTime;
+var gameRemainingTime;
+var currentTickTime;
+var lastTickTime;
+var gameTimeLimit
+var playerStartingX;
+var playerStartingY;
+var lastEnemyBulletFired;
+var nextBulletSpeedIncrease;
 
 // Defult Values - can be made modifiable in config. 
 var numOfEnemyLines = 4;
@@ -108,37 +117,42 @@ var playerBulletColor = '#FF0000';
 var enemyBulletColor = '#FF0000';
 var playerSpeed = 5;
 var enemySpeed = 5;
-var bulletSpeed = 5;
+var playerBulletSpeed = [0,-5];
+var enemyBulletSpeed = [0,2];
+var playerLives = 3;
 
 window.addEventListener("load", setupGame, false);
 
+// Main game loop - called every x ms - defined by the intervalTimer.
 function main() {
-	var now = Date.now();
-	var delta = now - then;
-    gameTimeLimit -= delta;
-    gameTick(delta / 1000);
-
-    if (gameTimeLimit <= 0) {
+	var currentTickTime = Date.now();
+	var timeDelta = currentTickTime - lastTickTime;
+    gameRemainingTime -= timeDelta;
+    gameTick();
+    if (gameRemainingTime <= 0) {
         endGame();
     }
-	
-	then = now;
+        
+	lastTickTime = currentTickTime;
 }
 
+// Setup function before the game starts.
 function setupGame()
 {
-	console.log("setupGame strated.");
+	console.log("setupGame started.");
 	// Get the canvas
 	canvas = document.getElementById("gameCanvas");
 	ctx = canvas.getContext("2d");
     document.getElementById("startGameButton").addEventListener("click", newGame, false );
 	// Game objects
+    playerStartingX = canvas.width / 2 - 50;
+    playerStartingY = canvas.height - 50;
 	player = new Player(
-        canvas.width / 2 - 50, // starting x
-        canvas.height - 50, // starting y
+        playerStartingX,
+        playerStartingY,
         20, // object's width
         20, // object's height
-        playerColor, // color
+        playerColor, 
         playerSpeed,
         playerBulletColor,
         canvas.height,
@@ -160,48 +174,51 @@ function setupGame()
             ));
             }
     }
+
 	// Handle keyboard controls
 	keysDown = {};
-
-	// Check for keys pressed where key represents the keycode captured
 	addEventListener("keydown", function (e) {keysDown[e.key] = true;}, false);
-
 	addEventListener("keyup", function (e) {delete keysDown[e.key];}, false);
 
 }
 
+// Called when the game starts.
 function newGame()
 {
-    console.log("newGame Started.");
+    console.log("newGame started.");
     playerScore = 0;
-	then = Date.now();
-    gameStartTime = Date.now();
+    currentTickTime = Date.now();
+    lastTickTime = currentTickTime;
+    gameStartTime = currentTickTime;
+    lastShotTime = currentTickTime - 500;
+    gameRemainingTime = gameTimeLimit
     // 1 ms execution time to make the canvas render fastest and cleanest
 	intervalTimer = setInterval(main, 1); 
 }
 
-function gameTick(modifier) {
-    //check if player holds down movment keys
+function gameTick() {
+    currentTickTime = Date.now();
+    // Check if player holds down movement keys and adjust position
 	if (("ArrowUp" in keysDown) ) { 
-		if(player.y>=canvas.height*0.6)
+		if(player.y >= canvas.height*0.6)
             player.update(0, -5)
 	}
 	if (('ArrowDown' in keysDown) ) { 
-		if(player.y<=canvas.height - 50)
+		if(player.y <= canvas.height - 50)
             player.update(0, 5)
 	}
 	if ('ArrowLeft' in keysDown) {
-		if(player.x>=20)
+		if(player.x >= 20)
             player.update(-5, 0)
 	}
 	if ('ArrowRight' in keysDown) { 
-		if(player.x<=canvas.width - 50)
+		if(player.x <= canvas.width - 50)
             player.update(5, 0)
 	}
     
     if (enemyDirection == 1 && enemies.length > 0)
     {
-        // Find the enemy closest to the right side of the screen
+        // Find enemy spaceship farthest to the right of the screen.
         var closestToRightSideEnemy = enemies[0];
         for (var i = 1; i < enemies.length; i++) {
             if (enemies[i].x > closestToRightSideEnemy.x) {
@@ -209,17 +226,15 @@ function gameTick(modifier) {
             }
         }
 
-        // Check if the enemy closest to the right side of 
-        // the screen has reached the right side of the screen.
+        // check if found ship is out of canvas bounds.
         if (closestToRightSideEnemy.x + 
-            closestToRightSideEnemy.width > canvas.width) {
-        // Reverse the direction of the enemies.
-        enemyDirection = -1;            
+                            closestToRightSideEnemy.width > canvas.width) {
+            enemyDirection = -1;            
         }          
     }
-    else if (enemyDirection == -1)
+    else if (enemyDirection == -1 && enemies.length > 0)
     {
-        // Find the enemy closest to the left side of the screen
+        // Find enemy spaceship farthest to the left of the screen.
         var closestToLeftSideEnemy = enemies[0];
         for (var i = 1; i < enemies.length; i++) {
             if (enemies[i].x < closestToLeftSideEnemy.x) {
@@ -227,8 +242,7 @@ function gameTick(modifier) {
             }
         }
 
-        // Check if the enemy closest to the left side of 
-        // the screen has reached the left side of the screen.
+        // check if found ship is out of canvas bounds.
         if (closestToLeftSideEnemy.x < 0) 
             enemyDirection = 1;
     }
@@ -241,24 +255,38 @@ function gameTick(modifier) {
             }
         }
     }
-
-    shootingDelta = Date.now() - lastShot
-    if (fireButton in keysDown && shootingDelta > 350) { // Player holding shoot
-		player.shoot(0, -5)
-        lastShot = Date.now()
-	}
-
-    // draw canvas
-    ctx.fillStyle = backgroundColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    //draw player
-    player.draw(ctx)
-    // Draw enemies
-    for (var i = 0; i < enemies.length; i++) {
-        enemies[i].draw(ctx);
-        enemies[i].update(enemyDirection, 0);
+    // Check if enemy bullet collides with the player
+    for (var j = 0; j < enemies.length; j++) {
+        for (var i = 0; i < enemies[j].bullets.length; i++) {
+            if (player.collidesWith(enemies[j].bullets[i])) {
+                enemyHitPlayer(j,i);
+                break;
+            }
+        }
     }
 
+    shootingTimeDelta = currentTickTime - lastShotTime
+    if (fireButton in keysDown && shootingTimeDelta > 350) { // Player holding shoot
+		player.shoot(playerBulletSpeed[0], playerBulletSpeed[1]);
+        lastShotTime = currentTickTime;
+
+	}
+    if (typeof lastEnemyBulletFired !== 'undefined') {
+        if (lastEnemyBulletFired.y >= canvas.height*0.6){
+            enemyFire();
+        }
+    }
+    else
+        enemyFire();
+
+    // Draw elements
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    player.draw(ctx)
+    for (var i = 0; i < enemies.length; i++) {
+        enemies[i].update(enemyDirection, 0);
+        enemies[i].draw(ctx);
+    }
 }
 function playerHitEnemy(enemyIndex,bulletIndex) {
     enemy = enemies[enemyIndex];
@@ -272,9 +300,33 @@ function playerHitEnemy(enemyIndex,bulletIndex) {
     if (enemies.length == 0)
         endGame();
 }
+function enemyHitPlayer(enemyIndex,bulletIndex) {
+    enemy = enemies[enemyIndex];
+    enemy.bullets.splice(bulletIndex, 1);
+    resetPlayerPosition();
+
+    playerLives--;
+    if (playerLives == 0) {
+        console.log("player lost");
+        endGame();
+    }
+}
+
+function enemyFire() {
+    // Generate a random index number of enemy ship
+    rndShip = Math.floor(Math.random() * enemies.length);
+    enemies[rndShip].shoot(enemyBulletSpeed[0],enemyBulletSpeed[1]);
+    lastEnemyBulletFired = enemies[rndShip].bullets[enemies[rndShip].bullets.length - 1];
+}
+function resetPlayerPosition() {
+    player.x = playerStartingX;
+    player.y = playerStartingY;
+}
+
 function endGame()
 {
-   window.clearInterval( intervalTimer ); //???
+    console.log("endgane triggered.");
+    window.clearInterval( intervalTimer ); 
 }
 
 

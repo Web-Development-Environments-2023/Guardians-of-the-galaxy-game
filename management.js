@@ -19,12 +19,15 @@ const registerBackButton = document.getElementById("backFromRegisterButton");
 const users = {
   s: {
     password: "s"
+  },
+  p: {
+    password: "testuser"
   }
 };
 
 function giveFocusToDiv(divToFocus) {
   appDivs = ["loginDiv", "registerDiv", "mainDiv", "configDiv"] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
-  for(let i=0; i<appDivs.length; i++) {
+  for(let i=0; i < appDivs.length; i++) {
       document.getElementById(appDivs[i]).style.display = "none"
   }
   divToFocus.style.display="block"
@@ -60,7 +63,6 @@ function registerUser(username, password) {
     console.log("User already exists.");
   } else {
     users[username] = {
-      username: username,
       password: password
     };
     console.log("User registered successfully.");
