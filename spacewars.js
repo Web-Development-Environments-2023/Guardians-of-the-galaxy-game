@@ -107,7 +107,7 @@ var playerStartingY;
 var lastEnemyBulletFired;
 var nextBulletSpeedIncrease;
 
-// Defult Values - can be made modifiable in config. 
+// Default Values - can be made modifiable in config. 
 var numOfEnemyLines = 4;
 var numOfEnemiesPerLine = 5;
 var spaceBetweenEnemies = 50;
@@ -326,7 +326,7 @@ function resetPlayerPosition() {
 function endGame()
 {
     console.log("endgane triggered.");
-    window.clearInterval( intervalTimer ); 
+    window.clearInterval(intervalTimer); 
 }
 
 
