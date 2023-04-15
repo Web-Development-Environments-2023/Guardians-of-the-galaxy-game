@@ -143,7 +143,7 @@ function setupGame()
 	// Get the canvas
 	canvas = document.getElementById("gameCanvas");
 	ctx = canvas.getContext("2d");
-    document.getElementById("startGameButton").addEventListener("click", newGame, false );
+    $("#startGameButton").on("click", newGame);
 	// Game objects
     playerStartingX = canvas.width / 2 - 50;
     playerStartingY = canvas.height - 50;
@@ -220,11 +220,11 @@ function gameTick() {
     {
         // Find enemy spaceship farthest to the right of the screen.
         var closestToRightSideEnemy = enemies[0];
-        for (var i = 1; i < enemies.length; i++) {
-            if (enemies[i].x > closestToRightSideEnemy.x) {
-                closestToRightSideEnemy = enemies[i];
+        $.each(enemies, function(i, enemy) {
+            if (enemy.x > closestToRightSideEnemy.x) {
+                closestToRightSideEnemy = enemy;
             }
-        }
+        });
 
         // check if found ship is out of canvas bounds.
         if (closestToRightSideEnemy.x + 
@@ -236,34 +236,34 @@ function gameTick() {
     {
         // Find enemy spaceship farthest to the left of the screen.
         var closestToLeftSideEnemy = enemies[0];
-        for (var i = 1; i < enemies.length; i++) {
-            if (enemies[i].x < closestToLeftSideEnemy.x) {
-                closestToLeftSideEnemy = enemies[i];
+        $.each(enemies, function(i, enemy) {
+            if (enemy.x < closestToLeftSideEnemy.x) {
+                closestToLeftSideEnemy = enemy;
             }
-        }
+        });
 
         // check if found ship is out of canvas bounds.
         if (closestToLeftSideEnemy.x < 0) 
             enemyDirection = 1;
     }
     // Check if player bullet collides with enemy
-    for (var i = 0; i < player.bullets.length; i++) {
-        for (var j = 0; j < enemies.length; j++) {
-            if (enemies[j].collidesWith(player.bullets[i])) {
-                playerHitEnemy(j,i);
-                break;
+    player.bullets.forEach(function(bullet, i) {
+        $(enemies).each(function(j, enemy) {
+            if (enemy.collidesWith(bullet)) {
+                playerHitEnemy(j, i);
+                return false; 
             }
-        }
-    }
+        });
+    });
     // Check if enemy bullet collides with the player
-    for (var j = 0; j < enemies.length; j++) {
-        for (var i = 0; i < enemies[j].bullets.length; i++) {
-            if (player.collidesWith(enemies[j].bullets[i])) {
-                enemyHitPlayer(j,i);
-                break;
+    $.each(enemies, function(j, enemy) {
+        $.each(enemy.bullets, function(i, bullet) {
+            if (player.collidesWith(bullet)) {
+                enemyHitPlayer(j, i);
+                return false; // equivalent to break
             }
-        }
-    }
+        });
+    });
 
     shootingTimeDelta = currentTickTime - lastShotTime
     if (fireButton in keysDown && shootingTimeDelta > 350) { // Player holding shoot
@@ -283,22 +283,31 @@ function gameTick() {
     ctx.fillStyle = backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     player.draw(ctx)
-    for (var i = 0; i < enemies.length; i++) {
-        enemies[i].update(enemyDirection, 0);
-        enemies[i].draw(ctx);
-    }
+
+    $.each(enemies, function(i, enemy) {
+        enemy.update(enemyDirection, 0);
+        enemy.draw(ctx);
+    });
 }
 function playerHitEnemy(enemyIndex,bulletIndex) {
-    enemy = enemies[enemyIndex];
-    enemyLineInFormation = (enemy.y / spaceBetweenEnemies) + 2; // From the bottom.
+    destroyedEnemy = enemies[enemyIndex];
+    enemyLineInFormation = (destroyedEnemy.y / spaceBetweenEnemies) + 2; // From the bottom.
     scoreToAdd = enemyLineInFormation * 5;
     playerScore += scoreToAdd;
 
     // Remove hit enemy and the bullet.
     enemies.splice(enemyIndex, 1);
     player.bullets.splice(bulletIndex, 1);
+
     if (enemies.length == 0)
         endGame();
+    else { // Move shot bullets from the destroyed enemy to another enemy's bullet array
+           // so it stays in the game and get rendered.
+        while (destroyedEnemy.bullets.length > 0) {
+            enemies[0].bullets.push(destroyedEnemy.bullets[0]);
+            destroyedEnemy.bullets.splice(0, 1);
+        }
+    }
 }
 function enemyHitPlayer(enemyIndex,bulletIndex) {
     enemy = enemies[enemyIndex];
@@ -314,9 +323,10 @@ function enemyHitPlayer(enemyIndex,bulletIndex) {
 
 function enemyFire() {
     // Generate a random index number of enemy ship
-    rndShip = Math.floor(Math.random() * enemies.length);
-    enemies[rndShip].shoot(enemyBulletSpeed[0],enemyBulletSpeed[1]);
-    lastEnemyBulletFired = enemies[rndShip].bullets[enemies[rndShip].bullets.length - 1];
+    const rndShipIndex = Math.floor(Math.random() * enemies.length);
+    const rndShip = enemies[rndShipIndex];
+    rndShip.shoot(enemyBulletSpeed[0], enemyBulletSpeed[1]);
+    lastEnemyBulletFired = rndShip.bullets[rndShip.bullets.length - 1];
 }
 function resetPlayerPosition() {
     player.x = playerStartingX;
@@ -328,14 +338,4 @@ function endGame()
     console.log("endgane triggered.");
     window.clearInterval(intervalTimer); 
 }
-
-
-
-
-
-
-
-
-
-
 
