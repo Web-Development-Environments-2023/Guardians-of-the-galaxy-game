@@ -32,3 +32,10 @@ html
   height: 200px;
   width: auto;
 }
+#gameCanvas {
+  /* display:flex;
+  flex: 1 1 auto;
+  border: 1px solid blue;
+  width:80vw; */
+  padding-top: 75px;
+}
