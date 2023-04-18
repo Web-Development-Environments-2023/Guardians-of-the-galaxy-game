@@ -201,88 +201,13 @@ function gameTick(currentTickTime, lastTickTime) {
     canvas = document.getElementById("gameCanvas");
 	ctx = canvas.getContext("2d");
     currentTickTime = Date.now();
-    // Check if player holds down movement keys and adjust position
-	if (("ArrowUp" in keysDown) ) { 
-		if(player.y >= canvas.height*0.6)
-            player.update(0, -playerSpeed)
-	}
-	if (('ArrowDown' in keysDown) ) { 
-		if(player.y <= canvas.height - 50)
-            player.update(0, playerSpeed)
-	}
-	if ('ArrowLeft' in keysDown) {
-		if(player.x >= 20)
-            player.update(-playerSpeed, 0)
-	}
-	if ('ArrowRight' in keysDown) { 
-		if(player.x <= canvas.width - 50)
-            player.update(playerSpeed, 0)
-	}
     
-    if (enemyDirection == 1 && enemies.length > 0)
-    {
-        // Find enemy spaceship farthest to the right of the screen.
-        var closestToRightSideEnemy = enemies[0];
-        $.each(enemies, function(i, enemy) {
-            if (enemy.x > closestToRightSideEnemy.x) {
-                closestToRightSideEnemy = enemy;
-            }
-        });
+    updatePlayerPosition();
+    adjustEnemiesHeading();
+    checkBulletsCollisions();
+    handleEnemyFire(currentTickTime);
 
-        // check if found ship is out of canvas bounds.
-        if (closestToRightSideEnemy.x + 
-                            closestToRightSideEnemy.width > canvas.width) {
-            enemyDirection = -1;            
-        }          
-    }
-    else if (enemyDirection == -1 && enemies.length > 0)
-    {
-        // Find enemy spaceship farthest to the left of the screen.
-        var closestToLeftSideEnemy = enemies[0];
-        $.each(enemies, function(i, enemy) {
-            if (enemy.x < closestToLeftSideEnemy.x) {
-                closestToLeftSideEnemy = enemy;
-            }
-        });
-
-        // check if found ship is out of canvas bounds.
-        if (closestToLeftSideEnemy.x < 0) 
-            enemyDirection = 1;
-    }
-    // Check if player bullet collides with enemy
-    player.bullets.forEach(function(bullet, i) {
-        $(enemies).each(function(j, enemy) {
-            if (enemy.collidesWith(bullet)) {
-                playerHitEnemy(j, i);
-                return false; 
-            }
-        });
-    });
-    // Check if enemy bullet collides with the player
-    $.each(enemies, function(j, enemy) {
-        $.each(enemy.bullets, function(i, bullet) {
-            if (player.collidesWith(bullet)) {
-                enemyHitPlayer(j, i);
-                return false; // equivalent to break
-            }
-        });
-    });
-
-    shootingTimeDelta = currentTickTime - lastShotTime
-    if (fireButton in keysDown && shootingTimeDelta > 350) { // Player holding the fire button
-		player.fire(playerBulletSpeed[0], playerBulletSpeed[1]);
-        lastShotTime = currentTickTime;
-
-	}
-    if (typeof lastEnemyBulletFired !== 'undefined') {
-        if (lastEnemyBulletFired.y >= canvas.height*0.6){
-            enemyFire();
-        }
-    }
-    else
-        enemyFire();
-
-
+    // Handle increasing enemy speed
     timerForSpeedIncreases += (currentTickTime - lastTickTime);
     if (speedIncreases > 0 && timerForSpeedIncreases >= 5000) { // 5 seconds
         speedIncreased = true;
@@ -290,11 +215,11 @@ function gameTick(currentTickTime, lastTickTime) {
         speedIncreases--;
         increaseEnemySpeed();
     }
+    
     // Draw elements
     ctx.fillStyle = backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     player.draw(ctx)
-
     $.each(enemies, function(i, enemy) {
         enemy.update(enemyDirection * enemySpeed, 0);
         enemy.draw(ctx);
@@ -323,11 +248,28 @@ function enemyHitPlayer(enemyIndex,bulletIndex) {
     enemy = enemies[enemyIndex];
     enemy.bullets.splice(bulletIndex, 1);
     resetPlayerPosition();
-
+    lastEnemyBulletFired = undefined;
     playerLives--;
     if (playerLives == 0) {
         endGame();
     }
+}
+function handleEnemyFire(currentTickTime) {
+    shootingTimeDelta = currentTickTime - lastShotTime
+    if (fireButton in keysDown && shootingTimeDelta > 350) { // Player holding the fire button
+		player.fire(playerBulletSpeed[0], playerBulletSpeed[1]);
+        lastShotTime = currentTickTime;
+
+	}
+    if (typeof lastEnemyBulletFired !== 'undefined') {
+        if (lastEnemyBulletFired.y >= canvas.height*0.6){
+            enemyFire();
+        }
+        else
+            console.log(lastEnemyBulletFired.y);
+    }
+    else
+        enemyFire();
 }
 function enemyFire() {
     // Generate a random index number of enemy ship
@@ -377,4 +319,78 @@ function randomXatPlayerDirection(enemyX) {
     if (player.x >= enemyX)
         return enemyBulletSpeed[0] + Math.random();
     return ((enemyBulletSpeed[0] + Math.random()) * -1);
+}
+function adjustEnemiesHeading() {
+    // Enemies heading right
+    if (enemyDirection == 1 && enemies.length > 0)
+    {
+        // Find enemy spaceship farthest to the right of the screen.
+        var closestToRightSideEnemy = enemies[0];
+        $.each(enemies, function(i, enemy) {
+            if (enemy.x > closestToRightSideEnemy.x) {
+                closestToRightSideEnemy = enemy;
+            }
+        });
+
+        // check if found ship is out of canvas bounds.
+        if (closestToRightSideEnemy.x + 
+                            closestToRightSideEnemy.width > canvas.width) {
+            enemyDirection = -1; // Switch to moving left
+        }          
+    }
+    // Enemies heading left
+    else if (enemyDirection == -1 && enemies.length > 0)
+    {
+        // Find enemy spaceship farthest to the left of the screen.
+        var closestToLeftSideEnemy = enemies[0];
+        $.each(enemies, function(i, enemy) {
+            if (enemy.x < closestToLeftSideEnemy.x) {
+                closestToLeftSideEnemy = enemy;
+            }
+        });
+
+        // check if found ship is out of canvas bounds.
+        if (closestToLeftSideEnemy.x < 0) 
+            enemyDirection = 1; // Switch to moving right
+    }
+}
+function checkBulletsCollisions() {
+    // Check if player bullet collides with enemy
+    player.bullets.forEach(function(bullet, i) {
+        $(enemies).each(function(j, enemy) {
+            if (enemy.collidesWith(bullet)) {
+                playerHitEnemy(j, i);
+                return false; 
+            }
+        });
+    });
+    // Check if enemy bullet collides with the player
+    $.each(enemies, function(j, enemy) {
+        $.each(enemy.bullets, function(i, bullet) {
+            if (player.collidesWith(bullet)) {
+                enemyHitPlayer(j, i);
+                return false; // equivalent to break
+            }
+        });
+    });
+
+}
+function updatePlayerPosition() {
+    // Check if player holds down movement keys and adjust position
+    if (("ArrowUp" in keysDown) ) { 
+        if(player.y >= canvas.height*0.6)
+            player.update(0, -playerSpeed)
+    }
+    if (('ArrowDown' in keysDown) ) { 
+        if(player.y <= canvas.height - 50)
+            player.update(0, playerSpeed)
+    }
+    if ('ArrowLeft' in keysDown) {
+        if(player.x >= 20)
+            player.update(-playerSpeed, 0)
+    }
+    if ('ArrowRight' in keysDown) { 
+        if(player.x <= canvas.width - 50)
+            player.update(playerSpeed, 0)
+    }
 }
