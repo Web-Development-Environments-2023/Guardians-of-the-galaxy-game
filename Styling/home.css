@@ -32,6 +32,48 @@ html
   width: auto;
 }
 
+#welcome_login_button {
+  position: fixed;
+  top: 60%;
+  left: 40%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 3vh 6vh;
+  font-size: 4vh;
+  font-weight: bold;
+  background-color: black;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 2vh;
+}
+
+/* Hover effect for the button */
+#welcome_login_button:hover {
+  background-color: #0056b3;
+}
+
+#welcome_register_button {
+  position: fixed;
+  top: 60%;
+  left: 60%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 3vh 6vh;
+  font-size: 4vh;
+  font-weight: bold;
+  background-color: black;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 2vh;
+}
+
+/* Hover effect for the button */
+#welcome_register_button:hover {
+  background-color: #0056b3;
+}
+
 
 
 
