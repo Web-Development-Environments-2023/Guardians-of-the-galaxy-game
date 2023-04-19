@@ -4,6 +4,8 @@ const homeButton = document.getElementById("homeButton");
 const loginButton = document.getElementById("loginButton");
 const registerButton = document.getElementById("registerButton");
 const configDiv = document.getElementById("configDiv");
+const welcome_login_button = document.getElementById("welcome_login_button");
+const welcome_register_button = document.getElementById("welcome_register_button");
 
 //Login page attributes
 const loginDiv = document.getElementById("loginDiv");
@@ -19,22 +21,29 @@ var registerRepeatPassword = document.getElementById("repeat-password");
 const registerSubmit = document.getElementById("registerSubmit");
 
 //Divs
-var appDivs = [logoDiv, loginDiv, registerDiv, configDiv] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
+var appDivs = [logoDiv, loginDiv, registerDiv, configDiv, gameDiv, welcome_login_button, welcome_register_button] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
 
 //Users dictionary
 var users = {"s" : "s"};
 
 function giveFocusToDiv(divToFocus) {
   for(let i=0; i<appDivs.length; i++) {
-      appDivs[i].style.display = "none"
+    appDivs[i].style.display = "none"
   }
+  if (divToFocus === logoDiv){
+    welcome_register_button.style.display="block"
+    welcome_login_button.style.display="block"
+  }
+  
   divToFocus.style.display="block"
 }
 
 //Main page methods
 homeButton.addEventListener("click", function() {giveFocusToDiv(logoDiv)}, false);
 loginButton.addEventListener("click", function() {giveFocusToDiv(loginDiv)}, false);
+welcome_login_button.addEventListener("click", function() {giveFocusToDiv(loginDiv)}, false);
 registerButton.addEventListener("click", function() {giveFocusToDiv(registerDiv)}, false);
+welcome_register_button.addEventListener("click", function() {giveFocusToDiv(registerDiv)}, false);
 
 //Login page methods
 loginSubmit.addEventListener("click", function() {loginUser(loginUsername.value, loginPassword.value)})
