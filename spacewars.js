@@ -138,7 +138,6 @@ function main() {
         
 	lastTickTime = currentTickTime;
 }
-
 // Setup function before the game starts.
 function setupGame() {
 	// Get the canvas
@@ -181,7 +180,6 @@ function setupGame() {
 	addEventListener("keyup", function (e) {delete keysDown[e.key];}, false);
 
 }
-
 // Called when the game starts.
 function newGame()
 {
@@ -195,8 +193,8 @@ function newGame()
     window.addEventListener('resize', resizeCanvas);
     // 1 ms execution time to make the canvas render fastest and cleanest
 	intervalTimer = setInterval(main, 1); 
+    //requestAnimationFrame(gameTick);
 }
-
 function gameTick(currentTickTime, lastTickTime) {
     canvas = document.getElementById("gameCanvas");
 	ctx = canvas.getContext("2d");
@@ -292,8 +290,11 @@ function resizeCanvas() {
     const windowHeight = window.innerHeight;
   
     // Calculate the canvas size based on the window size
-    const canvasWidth = Math.max(windowWidth - (0.1 * windowWidth), MIN_CANVAS_WIDTH);
-    const canvasHeight = Math.max(windowHeight- (0.1 * windowHeight), MIN_CANVAS_HEIGHT);
+    // const canvasWidth = Math.max(windowWidth - (0.1 * windowWidth), MIN_CANVAS_WIDTH);
+    // const canvasHeight = Math.max(windowHeight- (0.1 * windowHeight), MIN_CANVAS_HEIGHT);
+
+    const canvasWidth = windowWidth - (0.1 * windowWidth);
+    const canvasHeight = windowHeight- (0.1 * windowHeight);
   
     // Set the canvas size
     canvas.width = canvasWidth;
@@ -309,6 +310,8 @@ function resizeCanvas() {
     player.canvasHeight = canvasHeight;
     if (player.y > canvasHeight)
         player.y = playerStartingY;
+    if (player.x + 50 > canvasWidth)
+        player.x = canvasWidth - 50;
 }
 function increaseEnemySpeed() {
     enemySpeed += 0.5;
