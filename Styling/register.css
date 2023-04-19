@@ -1,25 +1,32 @@
 .center_register{
     position: absolute;
-    top: 70%;
+    top: 56%;
     left: 50%;
+    height: 90vh;
     transform: translate(-50%, -50%);
-    width: 400px;
+    width: 50%;
     background: white;
     border-radius: 10px;
 }
 .center_register h1{
     text-align: center;
-    padding: 0 0 20px 0;
-    border-bottom:  1px solid silver;
+    font-weight: bold;
+    padding: 0 0 1vw 0;
+    border-bottom:  0.2vh solid silver;
+    font-size: 6vh;
 }
 .center_register form{
-    padding: 0 40px;
+    padding: 0 5%;
     box-sizing: border-box;
 }
-.txt_field input:invalid {
-    border-color: red;
+input[type="date"]{
+    width: 100%;
+    padding: 0 2vw;
+    height: 6vh;
+    font-size: 3vh;
+    border: none;
 }
-  
-.txt_field input:invalid ~ span::before {
-    background-color: red;
-}
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: #666;
+    font-size: 6vh;
+  }

@@ -27,11 +27,15 @@ html
   transform: translateX(-50%);
   z-index: 9999;
 }
-
 .logo_picture {
-  height: 200px;
+  height: 30vh;
   width: auto;
 }
+
+
+
+
+
 #gameCanvas {
   /* display:flex;
   flex: 1 1 auto;

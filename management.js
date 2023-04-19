@@ -42,6 +42,7 @@ loginSubmit.addEventListener("click", function() {loginUser(loginUsername.value,
 function loginUser(username, password) {
   if (users[username] && users[username] === password) {
     console.log("Login successful.");
+    alert("Nice to see you " + username + "! Configure the game settings and start playing.");
     giveFocusToDiv(configDiv);
   } else {
     console.log("Invalid username or password.");
@@ -71,12 +72,14 @@ function registerUser(username, password, repeat) {
   else{
     users[username] = password
     console.log("User registered successfully.");
+    alert("Hi " + username + "! Welcome to space invaders game. Please login to start playing.");
     for (const key of Object.keys(users)) {
       console.log(key + ":" + users[key])
     }
     giveFocusToDiv(loginDiv)
   }
 }
+
 
 function sleep(milliseconds) {
   const date = Date.now();
