@@ -29,7 +29,7 @@ class GameObject {
 
 class SpaceShip extends GameObject {
     constructor(x, y, width, height, color, speed,
-                bulletColor, canvasHeight) {
+                bulletColor, canvasHeight, imageSource) {
         super(x, y, width, height, color, speed);
         this.canvasHeight = canvasHeight;
         this.bulletWidth = 4;
@@ -37,10 +37,20 @@ class SpaceShip extends GameObject {
         this.color = color;
         this.bulletColor = bulletColor;
         this.bullets = [];
+
+        const image = new Image();
+        image.src = imageSource;
+        image.onload = () => {
+            this.image = image;
+            this.height = image.height * 0.15;
+            this.width = image.width * 0.15;
+        }
+        
     }
 
     draw(ctx) {
-        super.draw(ctx);
+        //super.draw(ctx);
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
         for (var i = 0; i < this.bullets.length; i++) {
             this.bullets[i].draw(ctx);
             this.bullets[i].update();
@@ -68,8 +78,8 @@ class SpaceShip extends GameObject {
 }
 class Player extends SpaceShip {
     constructor(x, y, width, height, color, speed,
-                bulletColor, canvasHeight) {
-        super(x, y, width, height, color, speed, bulletColor, canvasHeight);
+                bulletColor, canvasHeight, imageSource) {
+        super(x, y, width, height, color, speed, bulletColor, canvasHeight, imageSource);
     }
 }
 class Bullet extends GameObject {
@@ -113,13 +123,13 @@ const MIN_CANVAS_HEIGHT = 768;
 // Default Values - can be made modifiable in config. 
 var numOfEnemyLines = 4;
 var numOfEnemiesPerLine = 5;
-var spaceBetweenEnemies = 50;
+var spaceBetweenEnemies = 100;
 var enemyColor = '#00FF00';
 var playerColor = '#0099CC';
 var playerBulletColor = '#FF0000';
 var enemyBulletColor = '#FF0000';
-var playerSpeed = 4;
-var enemySpeed = 1;
+var playerSpeed = 5;
+var enemySpeed = 3;
 var playerBulletSpeed = [0,-4];
 var enemyBulletSpeed = [0.5,2];
 var playerLives = 3;
@@ -155,8 +165,9 @@ function setupGame() {
                         playerColor, 
                         playerSpeed,
                         playerBulletColor,
-                        canvas.height
-    )
+                        canvas.height,
+                        './Images/player.png'
+    );
     
     // Create enemy objects with spacing between them.
     for (var i = 0; i < numOfEnemyLines; i++) { 
@@ -169,7 +180,8 @@ function setupGame() {
                     enemyColor,
                     enemySpeed,
                     enemyBulletColor,
-                    canvas.height
+                    canvas.height,
+                    './Images/enemy.png'
             ));
             }
     }
@@ -188,17 +200,21 @@ function newGame()
     lastTickTime = currentTickTime;
     gameStartTime = currentTickTime;
     lastShotTime = currentTickTime - 500;
-    gameRemainingTime = gameTimeLimit
+    gameRemainingTime = gameTimeLimit;
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    // 1 ms execution time to make the canvas render fastest and cleanest
-	intervalTimer = setInterval(main, 1); 
-    //requestAnimationFrame(gameTick);
+    resetPlayerPosition();
+    gameTick();
+    
 }
-function gameTick(currentTickTime, lastTickTime) {
+function gameTick() {
+    requestAnimationFrame(gameTick);
+    var currentTickTime = Date.now();
+	var timeDelta = currentTickTime - lastTickTime;
+    gameRemainingTime -= timeDelta;
+
     canvas = document.getElementById("gameCanvas");
 	ctx = canvas.getContext("2d");
-    currentTickTime = Date.now();
     
     updatePlayerPosition();
     adjustEnemiesHeading();
@@ -222,6 +238,11 @@ function gameTick(currentTickTime, lastTickTime) {
         enemy.update(enemyDirection * enemySpeed, 0);
         enemy.draw(ctx);
     });
+
+    if (gameRemainingTime <= 0) 
+        endGame();
+
+    lastTickTime = currentTickTime;
 }
 function playerHitEnemy(enemyIndex, bulletIndex) {
     destroyedEnemy = enemies[enemyIndex];
@@ -232,17 +253,18 @@ function playerHitEnemy(enemyIndex, bulletIndex) {
     // Remove hit enemy and the bullet.
     enemies.splice(enemyIndex, 1);
     player.bullets.splice(bulletIndex, 1);
+    console.log(enemies.length);
     if (enemies.length == 0)
         endGame();
     else { // Move shot bullets from the destroyed enemy to another enemy's bullet array
-           // so it stays in the game and get rendered.
+           // so it stays in the game and gets rendered.
         while (destroyedEnemy.bullets.length > 0) {
             enemies[0].bullets.push(destroyedEnemy.bullets[0]);
             destroyedEnemy.bullets.splice(0, 1);
         }
     }
 }
-function enemyHitPlayer(enemyIndex,bulletIndex) {
+function enemyHitPlayer(enemyIndex, bulletIndex) {
     enemy = enemies[enemyIndex];
     enemy.bullets.splice(bulletIndex, 1);
     resetPlayerPosition();
@@ -260,11 +282,8 @@ function handleEnemyFire(currentTickTime) {
 
 	}
     if (typeof lastEnemyBulletFired !== 'undefined') {
-        if (lastEnemyBulletFired.y >= canvas.height*0.6){
+        if (lastEnemyBulletFired.y >= canvas.height*0.6)
             enemyFire();
-        }
-        else
-            console.log(lastEnemyBulletFired.y);
     }
     else
         enemyFire();
@@ -283,7 +302,8 @@ function resetPlayerPosition() {
 }
 function endGame()
 {
-    window.clearInterval(intervalTimer); 
+    console.log("End game triggered");
+    //window.clearInterval(intervalTimer); 
 }
 function resizeCanvas() {
     const windowWidth = window.innerWidth;
