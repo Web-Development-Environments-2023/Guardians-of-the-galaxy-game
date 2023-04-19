@@ -42,8 +42,8 @@ class SpaceShip extends GameObject {
         image.src = imageSource;
         image.onload = () => {
             this.image = image;
-            this.height = image.height * 0.15;
-            this.width = image.width * 0.15;
+            this.height = image.height * 0.1;
+            this.width = image.width * 0.1;
         }
         
     }
@@ -171,19 +171,18 @@ function setupGame() {
     
     // Create enemy objects with spacing between them.
     for (var i = 0; i < numOfEnemyLines; i++) { 
-            for (var j = 0; j < numOfEnemiesPerLine; j++) { 
-                enemies.push(new SpaceShip(
-                    spaceBetweenEnemies + j * spaceBetweenEnemies,
-                    spaceBetweenEnemies + i * spaceBetweenEnemies,
-                    20,
-                    20,
-                    enemyColor,
-                    enemySpeed,
-                    enemyBulletColor,
-                    canvas.height,
-                    './Images/enemy.png'
-            ));
-            }
+        for (var j = 0; j < numOfEnemiesPerLine; j++) { 
+            enemies.push(new SpaceShip(
+                                        spaceBetweenEnemies + j * spaceBetweenEnemies,
+                                        spaceBetweenEnemies + i * spaceBetweenEnemies,
+                                        20,
+                                        20,
+                                        enemyColor,
+                                        enemySpeed,
+                                        enemyBulletColor,
+                                        canvas.height,
+                                        './Images/enemy.png' ));
+        }
     }
 
 	// Handle keyboard controls
