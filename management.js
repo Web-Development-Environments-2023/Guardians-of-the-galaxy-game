@@ -28,7 +28,7 @@ const closeButton = document.getElementById('closeButton');
 
 window.addEventListener("click", function(event) {
   // Close the pop-up dialog when clicking outside of it
-  if (about_us_popup.style.display === 'block' && event.target !== aboutDiv && event.target !== aboutButton){
+  if (about_us_popup.style.display === 'block' && event.target !== aboutDiv && event.target !== aboutButton && !about_us_popup.contains(event.target)){
     about_us_popup.style.display = "none";  
   }
   });
@@ -53,7 +53,7 @@ window.addEventListener("keydown", function(event) {
 });
 
 //Divs
-var appDivs = [logoDiv, loginDiv, registerDiv, configDiv, gameDiv, welcome_login_button, welcome_register_button, footer] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
+var appDivs = [logoDiv, loginDiv, registerDiv, configDiv, gameDiv, welcome_login_button, welcome_register_button, footer, endGameDiv] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
 
 //Users dictionary
 var users = {"s" : "s"};

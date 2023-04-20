@@ -1,0 +1,51 @@
+#endGameDiv{
+    background-image: url(https://images6.alphacoders.com/103/1033709.jpg);
+    background-size: cover;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 80vh;
+    transform: translate(-50%, -50%);
+    align-items: center;
+    border-radius: 2vh;
+  }
+  #endGameDiv h1{
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 0 0 1vw 0;
+    border-bottom:  0.2vh solid silver;
+    font-size: 6vh;
+  }
+  /* #endGameDiv h3{
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 0 0 1vw 0;
+    border-bottom:  0.2vh solid silver;
+    font-size: 4vh;
+  } */
+  #endGameDiv p{
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 0 0 1vw 0;
+    border-bottom:  0.2vh solid silver;
+    font-size: 3vh;
+  }
+
+  #endGameDiv button{
+    width: 30%;
+    height: 14vh;
+    border: 0.2vh solid;
+    background: #2691d9;
+    border-radius: 2vh;
+    font-size: 3vh;
+    color: #e9f4fb;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+}
+#endGameDiv button:hover{
+    background: green;
+}

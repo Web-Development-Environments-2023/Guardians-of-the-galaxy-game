@@ -140,6 +140,8 @@ var playerLives = 3;
 var speedIncreases = 4;
 
 // Score table intiallization
+var endGameDiv = document.getElementById("endGameDiv")
+var scores = document.getElementById("scores")
 var scoreTable = document.createElement("table");
 var headerRow = scoreTable.insertRow();
 var headerCell1 = headerRow.insertCell();
@@ -148,6 +150,14 @@ var headerCell3 = headerRow.insertCell();
 headerCell1.innerHTML = "Score";
 headerCell2.innerHTML = "Time Left";
 headerCell3.innerHTML = "Enemies Left";
+styleTable(scoreTable);
+
+function styleTable(table){
+    table.style.fontSize = "5vh";
+    table.style.color = "white";
+    table.style.alignItems = "center";
+
+}
 
 
 window.addEventListener("load", setupGame, false);
@@ -340,9 +350,11 @@ function endGame()
         endgameMessage = "Winner!";
     else
         endgameMessage = "endGame";
+
+    giveFocusToDiv(endGameDiv)
     //cancelAnimationFrame(animationLoop);
     //window.clearInterval(intervalTimer); 
-    resetGame();
+    //resetGame();
 }
 function resizeCanvas() {
     const windowWidth = window.innerWidth;
@@ -492,7 +504,7 @@ function addGameToScoreTable(score, timeLeftInSeconds, enemiesLeft) {
     cell1.innerHTML = score;
     cell2.innerHTML = timeLeftInSeconds;
     cell3.innerHTML = enemiesLeft;
-    // document.body.appendChild(scoreTable);
+    scores.appendChild(scoreTable);
 }
 function emptyScoreTable() {
     while (scoreTable.hasChildNodes()) 
