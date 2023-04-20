@@ -1,0 +1,15 @@
+#gameCanvas {
+    /* display:flex;
+    flex: 1 1 auto;
+    border: 1px solid blue;
+    width:80vw; */
+    padding-top: 10vh;
+}
+#scoreParaElement {
+    position: fixed;
+    z-index: 2;
+    color: white;
+    left: 2vh;
+    padding-top: 10vh;
+    font-size: 2vh;
+}
