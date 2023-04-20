@@ -117,18 +117,17 @@ var gameTimeLimit;
 var playerStartingX;
 var playerStartingY;
 var lastEnemyBulletFired;
-var speedIncreases = 4;
 var timerForSpeedIncreases = 0;
 var speedIncreased = false;
 var animationLoop;
 var remainingPlayerLives;
 var endgameMessage;
 var timeLeftInSeconds;
+var spaceBetweenEnemies;
 
 // Default Values - can be made modifiable in config. 
 var numOfEnemyLines = 4;
 var numOfEnemiesPerLine = 5;
-var spaceBetweenEnemies = 100;
 var enemyColor = '#00FF00';
 var playerColor = '#0099CC';
 var playerBulletColor = '#FF0000';
@@ -138,6 +137,7 @@ var enemySpeed = 3;
 var playerBulletSpeed = [0,-6];
 var enemyBulletSpeed = [0.5,2];
 var playerLives = 3;
+var speedIncreases = 4;
 
 // Score table intiallization
 var scoreTable = document.createElement("table");
@@ -170,15 +170,22 @@ function setupGame() {
 	// Get the canvas
 	canvas = document.getElementById("gameCanvas");
 	ctx = canvas.getContext("2d");
-    //$("#startGameButton").on("click", newGame);
+
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const canvasWidth = windowWidth - (0.1 * windowWidth);
+    const canvasHeight = windowHeight - (0.1 * windowHeight);
+    canvas.width = windowWidth;
+    canvas.height = windowHeight;
+    
 	// Game objects
-    playerStartingX = canvas.width / 2 - 50;
-    playerStartingY = canvas.height - 150;
+    playerStartingX = ((canvas.width / 2) - (canvasWidth * 0.05));
+    playerStartingY = (canvas.height - (canvasHeight * 0.05));
 	player = new Player(
                         playerStartingX,
                         playerStartingY,
-                        20, // object's width
-                        20, // object's height
+                        20, // object's width - placeholder
+                        20, // object's height - placeholder
                         playerColor, 
                         playerSpeed,
                         playerBulletColor,
@@ -186,6 +193,7 @@ function setupGame() {
                         './Images/gurdianPlayer.png'
     );
     
+    spaceBetweenEnemies = canvasHeight * 0.06;
     // Create enemy objects with spacing between them.
     for (var i = 0; i < numOfEnemyLines; i++) { 
         for (var j = 0; j < numOfEnemiesPerLine; j++) { 
@@ -198,7 +206,7 @@ function setupGame() {
                                         enemySpeed,
                                         enemyBulletColor,
                                         canvas.height,
-                                        './Images/enemy.png' ));
+                                        './Images/enemy.png'));
         }
     }
     // Add hearts as lives indication at the top of the canvas
@@ -225,16 +233,20 @@ function newGame()
     lastShotTime = currentTickTime - 500;
     gameRemainingTime = gameTimeLimit;
     remainingPlayerLives = playerLives;
-    playerStartingX = canvas.width / 2 - player.width;
-    playerStartingY = canvas.height - player.height;
-    // $('#LivesText').text(remainingPlayerLives);
+    
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const canvasWidth = windowWidth - (0.1 * windowWidth);
+    const canvasHeight = windowHeight - (0.1 * windowHeight);
+    canvas.width = windowWidth;
+    canvas.height = windowHeight;
+    
+    playerStartingX = ((canvas.width / 2) - (canvasWidth * 0.05));
+    playerStartingY = (canvas.height - (canvasHeight * 0.05));
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    //player.height = canvas.height * 0.05;
-    //player.width = canvas.height * 0.05;
     resetPlayerPosition();
     CountdownToStart();
-    //gameTick();
 }
 function gameTick() {
     animationLoop = requestAnimationFrame(gameTick);
@@ -317,17 +329,16 @@ function enemyFire() {
     // Generate a random index number of enemy ship
     const rndShipIndex = Math.floor(Math.random() * enemies.length);
     const rndShip = enemies[rndShipIndex];
-    // rndShip.fire(enemyBulletSpeed[0], enemyBulletSpeed[1]);
     rndShip.fire(randomXatPlayerDirection(rndShip.x), enemyBulletSpeed[1]);
     lastEnemyBulletFired = rndShip.bullets[rndShip.bullets.length - 1];
 }
 function resetPlayerPosition() {
     player.x = playerStartingX;
     player.y = playerStartingY;
+    player.draw(ctx);
 }
 function endGame()
 {
-    console.log("End game triggered");
     addGameToScoreTable(playerScore, timeLeftInSeconds, enemies.length);
     
     if (playerLives == 0)
@@ -359,18 +370,13 @@ function resizeCanvas() {
     canvas.height = canvasHeight;
     
     // Update canvas size for objects
-    playerStartingX = canvas.width / 2 - player.width;
-    playerStartingY = canvas.height - player.height;
+    playerStartingX = ((canvas.width / 2) - (canvasWidth * 0.05));
+    playerStartingY = (canvas.height - (canvasHeight * 0.05));
 
     enemies.forEach(function (enemy, i) {
         enemy.canvasHeight = canvasHeight;
-       // deltaY = enemy.height - (canvasHeight * 0.05);
-       // deltaX = enemy.width - (canvasWidth * 0.05);
         enemy.height = canvasHeight * 0.05;
         enemy.width = canvasHeight * 0.05;
-        //console.log("old:", enemy.x, "new:", enemy.x += deltaX);
-       // enemy.update(-deltaX, -deltaY);
-        
     });
 
     player.canvasHeight = canvasHeight;
@@ -440,7 +446,7 @@ function checkBulletsCollisions() {
         $.each(enemy.bullets, function(i, bullet) {
             if (player.collidesWith(bullet)) {
                 enemyHitPlayer(j, i);
-                return false; // equivalent to break
+                return false;
             }
         });
     });
