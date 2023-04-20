@@ -98,6 +98,7 @@ class Bullet extends GameObject {
 var canvas;
 var ctx;
 const backgroundColor = '#000000'
+//const backgroundColor = '#FFFFFF'
 var enemies = [];
 var player;
 var keysDown = {};

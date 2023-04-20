@@ -3,7 +3,9 @@
     flex: 1 1 auto;
     border: 1px solid blue;
     width:80vw; */
-    padding-top: 5vh;
+    padding-top: 4vh;
+    bottom: 3vh;
+    width: 100%;
 }
 #scoreParaElement {
     position: fixed;
