@@ -7,12 +7,10 @@ class GameObject {
         this.color = color
         this.speed = speed
     }
-
     draw(ctx) {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
-
     update(dx, dy) {
         this.x += dx;
         this.y += dy;
@@ -45,7 +43,6 @@ class SpaceShip extends GameObject {
         }
         
     }
-
     draw(ctx) {
         //super.draw(ctx);
         if (this.image)
@@ -60,7 +57,6 @@ class SpaceShip extends GameObject {
             }
         }
     }
-     
     // A method used to fire bullets from a spaceship
     fire(dx,dy) {
         this.bullets.push(new Bullet(
@@ -95,10 +91,17 @@ class Bullet extends GameObject {
     }
 }
 
+const backgroundColor = '#000000'
+const ENEMY_BASE_SPEED = 3;
+const ENEMY_BULLET_BASE_SPEED = [0.5,2];
+const BASE_SPEED_INCREASES = 4;
+const MIN_CANVAS_WIDTH = 1366;
+const MIN_CANVAS_HEIGHT = 768;
+const livesElement = document.getElementById("LivesText");
+const countdown = document.createElement('div');
+
 var canvas;
 var ctx;
-const backgroundColor = '#000000'
-//const backgroundColor = '#FFFFFF'
 var enemies = [];
 var player;
 var keysDown = {};
@@ -119,12 +122,8 @@ var timerForSpeedIncreases = 0;
 var speedIncreased = false;
 var animationLoop;
 var remainingPlayerLives;
-const ENEMY_BASE_SPEED = 3;
-const ENEMY_BULLET_BASE_SPEED = [0.5,2];
-const BASE_SPEED_INCREASES = 4;
-const MIN_CANVAS_WIDTH = 1366;
-const MIN_CANVAS_HEIGHT = 768;
-const livesElement = document.getElementById("LivesText");
+var endgameMessage;
+var timeLeftInSeconds;
 
 // Default Values - can be made modifiable in config. 
 var numOfEnemyLines = 4;
@@ -136,12 +135,22 @@ var playerBulletColor = '#FF0000';
 var enemyBulletColor = '#FF0000';
 var playerSpeed = 5;
 var enemySpeed = 3;
-var playerBulletSpeed = [0,-4];
+var playerBulletSpeed = [0,-6];
 var enemyBulletSpeed = [0.5,2];
 var playerLives = 3;
 
-window.addEventListener("load", setupGame, false);
+// Score table intiallization
+var scoreTable = document.createElement("table");
+var headerRow = scoreTable.insertRow();
+var headerCell1 = headerRow.insertCell();
+var headerCell2 = headerRow.insertCell();
+var headerCell3 = headerRow.insertCell();
+headerCell1.innerHTML = "Score";
+headerCell2.innerHTML = "Time Left";
+headerCell3.innerHTML = "Enemies Left";
 
+
+window.addEventListener("load", setupGame, false);
 addEventListener("keydown", function (e) {keysDown[e.key] = true;}, false);
 addEventListener("keyup", function (e) {delete keysDown[e.key];}, false);
 // Main game loop - called every x ms - defined by the intervalTimer.
@@ -164,7 +173,7 @@ function setupGame() {
     //$("#startGameButton").on("click", newGame);
 	// Game objects
     playerStartingX = canvas.width / 2 - 50;
-    playerStartingY = canvas.height - 50;
+    playerStartingY = canvas.height - 150;
 	player = new Player(
                         playerStartingX,
                         playerStartingY,
@@ -193,7 +202,7 @@ function setupGame() {
         }
     }
 
-    for (let i = 0; i < playerLives; i++) {
+    for (let i = livesElement.childElementCount ; i < playerLives; i++) {
         const heartImg = document.createElement("img");
         heartImg.src = "./Images/heart.png"; // replace with the path to your heart image
         heartImg.alt = "Heart";
@@ -201,6 +210,7 @@ function setupGame() {
         heartImg.style.width = "2vh";
         livesElement.appendChild(heartImg);
     }
+
 	// Reset keysDown
 	keysDown = {};
 
@@ -215,11 +225,14 @@ function newGame()
     lastShotTime = currentTickTime - 500;
     gameRemainingTime = gameTimeLimit;
     remainingPlayerLives = playerLives;
+    playerStartingX = canvas.width / 2 - player.width;
+    playerStartingY = canvas.height - player.height;
     // $('#LivesText').text(remainingPlayerLives);
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
     resetPlayerPosition();
-    gameTick();
+    CountdownToStart();
+    //gameTick();
 }
 function gameTick() {
     animationLoop = requestAnimationFrame(gameTick);
@@ -246,14 +259,7 @@ function gameTick() {
         increaseEnemySpeed();
     }
     
-    // Draw elements
-    ctx.fillStyle = backgroundColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    player.draw(ctx)
-    $.each(enemies, function(i, enemy) {
-        enemy.update(enemyDirection * enemySpeed, 0);
-        enemy.draw(ctx);
-    });
+    drawAllElements()
 
     if (gameRemainingTime <= 0) 
         endGame();
@@ -286,7 +292,6 @@ function enemyHitPlayer(enemyIndex, bulletIndex) {
     resetPlayerPosition();
     lastEnemyBulletFired = undefined;
     remainingPlayerLives--;
-    // $('#LivesText').text(remainingPlayerLives);
     livesElement.removeChild(livesElement.lastChild);
     if (remainingPlayerLives == 0) {
         endGame();
@@ -321,6 +326,18 @@ function resetPlayerPosition() {
 function endGame()
 {
     console.log("End game triggered");
+    addGameToScoreTable(playerScore, timeLeftInSeconds, enemies.length);
+    
+    if (playerLives == 0)
+        endgameMessage = "You lost";  
+    else if (enemies.length == 0)
+        endgameMessage = "Champion!";  
+    else if (timeLeftInSeconds <= 0 && playerScore < 100)
+        endgameMessage = "You can do better";
+    else if (timeLeftInSeconds <= 0 && playerScore >= 100)
+        endgameMessage = "Winner!";
+    else
+        endgameMessage = "endGame";
     //cancelAnimationFrame(animationLoop);
     //window.clearInterval(intervalTimer); 
     resetGame();
@@ -330,37 +347,36 @@ function resizeCanvas() {
     const windowHeight = window.innerHeight;
   
     // Calculate the canvas size based on the window size
-    // const canvasWidth = Math.max(windowWidth - (0.1 * windowWidth), MIN_CANVAS_WIDTH);
-    // const canvasHeight = Math.max(windowHeight- (0.1 * windowHeight), MIN_CANVAS_HEIGHT);
+
 
     const canvasWidth = windowWidth - (0.1 * windowWidth);
-    const canvasHeight = windowHeight- (0.1 * windowHeight);
+    const canvasHeight = windowHeight - (0.1 * windowHeight);
   
     // Set the canvas size
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     
     // Update canvas size for objects
-    playerStartingY = canvas.height - 50;
-    playerStartingX = canvas.width / 2 - 50;
+    playerStartingX = canvas.width / 2 - player.width;
+    playerStartingY = canvas.height - player.height;
 
     enemies.forEach(function (enemy, i) {
         enemy.canvasHeight = canvasHeight;
-        /*deltaY = enemy.height - (canvasHeight * 0.05);
-        deltaX = enemy.width - (canvasWidth * 0.05);
+       // deltaY = enemy.height - (canvasHeight * 0.05);
+       // deltaX = enemy.width - (canvasWidth * 0.05);
         enemy.height = canvasHeight * 0.05;
         enemy.width = canvasHeight * 0.05;
-        console.log("old:", enemy.x, "new:", enemy.x += deltaX);
-        enemy.update(-deltaX, -deltaY);*/
+        //console.log("old:", enemy.x, "new:", enemy.x += deltaX);
+       // enemy.update(-deltaX, -deltaY);
         
     });
 
     player.canvasHeight = canvasHeight;
     player.height = canvasHeight * 0.05;
     player.width = canvasHeight * 0.05;
-    if (player.y > canvasHeight)
+    if (player.y + player.height > canvasHeight) 
         player.y = playerStartingY;
-    if (player.x + 50 > canvasWidth)
+    if (player.x + player.width > canvasWidth)
         player.x = canvasWidth - 50;
 }
 function increaseEnemySpeed() {
@@ -435,7 +451,7 @@ function updatePlayerPosition() {
             player.update(0, -playerSpeed)
     }
     if (('ArrowDown' in keysDown) ) { 
-        if(player.y <= canvas.height - 50)
+        if(player.y <= (canvas.height - player.height))
             player.update(0, playerSpeed)
     }
     if ('ArrowLeft' in keysDown) {
@@ -443,7 +459,7 @@ function updatePlayerPosition() {
             player.update(-playerSpeed, 0)
     }
     if ('ArrowRight' in keysDown) { 
-        if(player.x <= canvas.width - 50)
+        if(player.x <= (canvas.width - player.width))
             player.update(playerSpeed, 0)
     }
 }
@@ -459,4 +475,64 @@ function resetGame(){
     $('#ScoreText').text(playerScore);
     setupGame();
     newGame();
+}
+function pauseGame(){
+    cancelAnimationFrame(animationLoop);
+}
+function continueGame() {
+    // If equals undefined the game was never started or 
+    // paused so cannot be continued.
+    if (animationLoop !== 'undefined')                        
+        gameTick();
+}
+function addGameToScoreTable(score, timeLeftInSeconds, enemiesLeft) {
+    var newRow = scoreTable.insertRow();
+    var cell1 = newRow.insertCell();
+    var cell2 = newRow.insertCell();
+    var cell3 = newRow.insertCell();
+
+    cell1.innerHTML = score;
+    cell2.innerHTML = timeLeftInSeconds;
+    cell3.innerHTML = enemiesLeft;
+    // document.body.appendChild(scoreTable);
+}
+function emptyScoreTable() {
+    while (scoreTable.hasChildNodes()) 
+        scoreTable.removeChild(scoreTable.firstChild);
+}
+function CountdownToStart() {
+    let count = 5;
+    countdown.setAttribute('id', 'countdown');
+    countdown.style.position = 'absolute';
+    countdown.style.top = canvas.offsetTop + canvas.height/2 - 50 + 'px';
+    countdown.style.left = canvas.offsetLeft + canvas.width/2 - 50 + 'px';
+    countdown.style.width = '100px';
+    countdown.style.height = '100px';
+    countdown.style.backgroundColor = 'black';
+    countdown.style.color = 'white';
+    countdown.style.display = 'flex';
+    countdown.style.fontSize = '15vh';
+    countdown.style.alignItems = 'center';
+    countdown.style.justifyContent = 'center';
+    document.body.appendChild(countdown);
+    drawAllElements();
+    const countdownInterval = setInterval(() => {
+        countdown.innerText = count;
+        count--;
+        if (count < 0) {
+            clearInterval(countdownInterval);
+            countdown.remove();
+            gameTick()
+        }
+    }, 1000);
+}
+function drawAllElements(){
+    // Draw elements
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    player.draw(ctx)
+    $.each(enemies, function(i, enemy) {
+        enemy.update(enemyDirection * enemySpeed, 0);
+        enemy.draw(ctx);
+    });
 }

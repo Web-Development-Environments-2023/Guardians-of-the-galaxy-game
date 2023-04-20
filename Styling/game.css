@@ -3,7 +3,7 @@
     flex: 1 1 auto;
     border: 1px solid blue;
     width:80vw; */
-    padding-top: 4vh;
+    top: 4vh;
     bottom: 3vh;
     width: 100%;
 }
@@ -12,6 +12,6 @@
     z-index: 2;
     color: white;
     left: 2vh;
-    padding-top: 10vh;
+     padding-top: 4vh; 
     font-size: 2vh;
 }
