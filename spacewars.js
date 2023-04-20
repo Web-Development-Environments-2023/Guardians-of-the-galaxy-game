@@ -183,7 +183,7 @@ function setupGame() {
                         playerSpeed,
                         playerBulletColor,
                         canvas.height,
-                        './Images/player.png'
+                        './Images/gurdianPlayer.png'
     );
     
     // Create enemy objects with spacing between them.
@@ -201,7 +201,7 @@ function setupGame() {
                                         './Images/enemy.png' ));
         }
     }
-
+    // Add hearts as lives indication at the top of the canvas
     for (let i = livesElement.childElementCount ; i < playerLives; i++) {
         const heartImg = document.createElement("img");
         heartImg.src = "./Images/heart.png"; // replace with the path to your heart image
