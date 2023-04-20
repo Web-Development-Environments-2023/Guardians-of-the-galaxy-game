@@ -153,18 +153,7 @@ headerCell3.innerHTML = "Enemies Left";
 window.addEventListener("load", setupGame, false);
 addEventListener("keydown", function (e) {keysDown[e.key] = true;}, false);
 addEventListener("keyup", function (e) {delete keysDown[e.key];}, false);
-// Main game loop - called every x ms - defined by the intervalTimer.
-function main() {
-	var currentTickTime = Date.now();
-	var timeDelta = currentTickTime - lastTickTime;
-    gameRemainingTime -= timeDelta;
-    gameTick(currentTickTime, lastTickTime);
-    if (gameRemainingTime <= 0) {
-        endGame();
-    }
-        
-	lastTickTime = currentTickTime;
-}
+
 // Setup function before the game starts.
 function setupGame() {
 	// Get the canvas
@@ -262,7 +251,7 @@ function gameTick() {
     updatePlayerPosition();
     adjustEnemiesHeading();
     checkBulletsCollisions();
-    handleEnemyFire(currentTickTime);
+    handleShipsShooting(currentTickTime);
 
     // Handle increasing enemy speed
     timerForSpeedIncreases += (currentTickTime - lastTickTime);
@@ -311,7 +300,7 @@ function enemyHitPlayer(enemyIndex, bulletIndex) {
         endGame();
     }
 }
-function handleEnemyFire(currentTickTime) {
+function handleShipsShooting(currentTickTime) {
     shootingTimeDelta = currentTickTime - lastShotTime
     if (fireButton in keysDown && shootingTimeDelta > 350) { // Player holding the fire button
 		player.fire(playerBulletSpeed[0], playerBulletSpeed[1]);
