@@ -230,6 +230,8 @@ function newGame()
     // $('#LivesText').text(remainingPlayerLives);
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
+    //player.height = canvas.height * 0.05;
+    //player.width = canvas.height * 0.05;
     resetPlayerPosition();
     CountdownToStart();
     //gameTick();
@@ -474,7 +476,8 @@ function resetGame(){
     playerScore = 0;
     $('#ScoreText').text(playerScore);
     setupGame();
-    newGame();
+    setTimeout(() => {newGame();}, 2000);
+    
 }
 function pauseGame(){
     cancelAnimationFrame(animationLoop);
