@@ -9,7 +9,7 @@
 
 html
 {
-	background-image: url(https://images.pling.com/img/00/00/63/00/40/1662284/747f5fe2a9f88f827009192082476067f10bfe1cf8dc59f69896fdde527647228d94.jpg);
+	background-image: url(https://images5.alphacoders.com/859/859417.jpg);
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -20,22 +20,35 @@ html
   padding: 0;
 }
 
+
 #game_logo {
   position: fixed;
-  top: 20%;
-  left: 50%;
+  top: 15%;
+  left: 15%;
   transform: translateX(-50%);
   z-index: 9999;
 }
 .logo_picture {
+  border-radius: 90px;
   height: 30vh;
   width: auto;
+
+}
+.names{
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  flex: 1;
+  text-align: left;
+  position: relative;
+  font-size: 3.5vh;
+  margin-top: 0.5%;
+  color: aliceblue;
 }
 
 #welcome_login_button {
   position: fixed;
-  top: 60%;
-  left: 40%;
+  top: 20%;
+  left: 90%;
   transform: translateX(-50%);
   z-index: 9999;
   padding: 3vh 6vh;
@@ -55,8 +68,8 @@ html
 
 #welcome_register_button {
   position: fixed;
-  top: 60%;
-  left: 60%;
+  top: 40%;
+  left: 90%;
   transform: translateX(-50%);
   z-index: 9999;
   padding: 3vh 6vh;

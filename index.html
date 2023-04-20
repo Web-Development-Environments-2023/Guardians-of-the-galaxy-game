@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="shortcut icon" type="image/x-icon" href="https://images.pling.com/img/00/00/63/00/40/1662284/747f5fe2a9f88f827009192082476067f10bfe1cf8dc59f69896fdde527647228d94.jpg">
+    <link rel="shortcut icon" type="image/x-icon" id="wallpaper" href="https://images5.alphacoders.com/859/859417.jpg">
+
+    <!-- <link rel="shortcut icon" type="image/x-icon" href="https://images.pling.com/img/00/00/63/00/40/1662284/747f5fe2a9f88f827009192082476067f10bfe1cf8dc59f69896fdde527647228d94.jpg"> -->
     <meta charset="UTF-8">
     <title>Space Invaders Game</title>
     <link rel="stylesheet" type="text/css" href="Styling/home.css" />
     <link rel="stylesheet" type="text/css" href="Styling/navigation.css" />
+    <link rel="stylesheet" type="text/css" href="Styling/footer.css" />
     <link rel="stylesheet" type="text/css" href="Styling/login.css" />
     <link rel="stylesheet" type="text/css" href="Styling/register.css" />
     <link rel="stylesheet" type="text/css" href="Styling/config.css" />
@@ -17,17 +20,25 @@
 
       <div id="game_logo">
         <header>
-          <img class="logo_picture" src="https://www.giantfreakinrobot.com/wp-content/uploads/2021/04/space-invaders-logo-plain.jpg">
+          <img class="logo_picture" src="https://images8.alphacoders.com/829/829758.jpg">
+          <div class="names">
+            <h1 id="nams"> 
+                &nbsp;Guardians
+                <br/>
+                &nbsp;of the galaxy
+            </h1>
+    
+        </div>
         </header>
       </div>
 
       <button id="welcome_login_button">Login</button>
 
-      <button id="welcome_register_button">SIGN UP</button>
+      <button id="welcome_register_button">Sign up</button>
 
       <nav>
         <div class="navigation_logo">
-          <p>welcome to space!</p>
+          <p>Saar & Lior</p>
         </div>
         <ul>
           <li><a href="#" id="homeButton">Home</a></li>
@@ -102,7 +113,7 @@
 
       <div class="center_config" id="configDiv" style="display: none;">
         <h1>Configure The Game</h1>
-        <form method="post" onsubmit="return false">
+        <form method="post" id="configForm" onsubmit="return false">
           <div class="txt_field">
             <input type="text" autocomplete="off" id="fireButtonInput" name="fireButtonInput" maxlength="1" pattern="[A-Za-z\s]" required>
             <span></span>
@@ -117,18 +128,30 @@
         </form>
       </div>
 
-<!--       
-      <div id="configDiv" style="display: none;">
-        <label for="fireButtonInput">Choose a button to fire at enemies:</label>
-        <input type="text" autocomplete="off" id="fireButtonInput" name="fireButtonInput" maxlength="1" pattern="[A-Za-z\s]" required>
-        <br>
+      <footer class="footer">
+        <div class="container">
+          <ul class="social-icons">
+            <li><a href="https://www.facebook.com/lior.mish" target="_blank"><img src="Images/facebook-icon.png" alt="Facebook"><span>Lior's Facebook</span></a></li>
+            <li><a href="https://www.instagram.com/mishutinlior/" target="_blank"><img src="Images/instagram-icon.png" alt="Instagram"><span>Lior's Instegram</span></a></li>
+            <li><a href="https://www.linkedin.com/in/lior-mishutin-94a2021a9/" target="_blank"><img src="Images/linkedin-icon.png" alt="LinkedIn"><span>Lior's Linkedin</span></a></li>
+          </ul>
+        </div>
+      </footer>
+
+    
+
+      <!-- <footer >
+        <div class="footer-content" >
+            <ul class="socials"> 
+                Share:  <li> <a href="https://www.facebook.com/sharer/sharer.php?u=https://web-development-environments-2023.github.io/assignment2-204687685_323225409/"><i class="fa fa-facebook"></i></a></li>
+                <li> <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://web-development-environments-2023.github.io/assignment2-204687685_323225409/"><i class="fa fa-linkedin"></i></a></li>
+                <li> <a href="https://twitter.com/intent/tweet?text=Awesome%20Blog!&url=https://web-development-environments-2023.github.io/assignment2-204687685_323225409/"><i class="fa fa-twitter"></i></a></li>
+                <li >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:ayelem@post.bgu.ac.il">Contact Us: &nbsp; <i class="fa fa-envelope"></i></a></li>
+            </ul>
+        </div>
         
-        <label for="timeLimit">Choose game time limit (in minutes, minimum=2):</label>
-        <input type="number" autocomplete="off" id="timeLimit" name="timeLimit" min="2" max="9999" required>
-        <br>
-        
-        <button id="startGameButton">Start Game</button>
-      </div> -->
+    </footer> -->
+
 
       <script src="config.js"></script>
       <script src="management.js"></script>
