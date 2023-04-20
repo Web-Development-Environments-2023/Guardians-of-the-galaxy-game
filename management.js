@@ -6,6 +6,7 @@ const registerButton = document.getElementById("registerButton");
 const configDiv = document.getElementById("configDiv");
 const welcome_login_button = document.getElementById("welcome_login_button");
 const welcome_register_button = document.getElementById("welcome_register_button");
+const footer = document.getElementById("footer");
 
 //Login page attributes
 const loginDiv = document.getElementById("loginDiv");
@@ -26,7 +27,7 @@ const about_us_popup = document.getElementById('about_us_popup');
 const closeButton = document.getElementById('closeButton');
 
 //Divs
-var appDivs = [logoDiv, loginDiv, registerDiv, configDiv, gameDiv, welcome_login_button, welcome_register_button] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
+var appDivs = [logoDiv, loginDiv, registerDiv, configDiv, gameDiv, welcome_login_button, welcome_register_button, footer] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
 
 //Users dictionary
 var users = {"s" : "s"};
@@ -38,6 +39,9 @@ function giveFocusToDiv(divToFocus) {
   if (divToFocus === logoDiv){
     welcome_register_button.style.display="block"
     welcome_login_button.style.display="block"
+  }
+  if (divToFocus != gameDiv){
+    footer.style.display="block"
   }
   
   divToFocus.style.display="block"
