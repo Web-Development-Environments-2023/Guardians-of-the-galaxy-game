@@ -23,8 +23,34 @@ const registerSubmit = document.getElementById("registerSubmit");
 
 //About
 const aboutButton = document.getElementById('aboutButton');
-const about_us_popup = document.getElementById('about_us_popup');
+const about_us_popup = document.getElementById('aboutDiv');
 const closeButton = document.getElementById('closeButton');
+
+window.addEventListener("click", function(event) {
+  // Close the pop-up dialog when clicking outside of it
+  if (about_us_popup.style.display === 'block' && event.target !== aboutDiv && event.target !== aboutButton){
+    about_us_popup.style.display = "none";  
+  }
+  });
+
+// Show the popup when the "About us" button is clicked
+aboutButton.addEventListener('click', function() {
+  about_us_popup.style.display = 'block';
+});
+
+// Hide the popup when the close button is clicked
+closeButton.addEventListener('click', function() {
+  about_us_popup.style.display = 'none';
+});
+
+
+
+window.addEventListener("keydown", function(event) {
+  // Close the pop-up dialog when pressing the Escape key
+  if (event.key === "Escape") {
+    about_us_popup.style.display = "none";
+  }
+});
 
 //Divs
 var appDivs = [logoDiv, loginDiv, registerDiv, configDiv, gameDiv, welcome_login_button, welcome_register_button, footer] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
@@ -106,29 +132,3 @@ function sleep(milliseconds) {
     currentDate = Date.now();
   } while (currentDate - date < milliseconds);
 }
-
-
-// Show the popup when the "About us" button is clicked
-aboutButton.addEventListener('click', function() {
-  about_us_popup.style.display = 'block';
-});
-
-// Hide the popup when the close button is clicked
-closeButton.addEventListener('click', function() {
-  about_us_popup.style.display = 'none';
-});
-
-//when the user press esc key the modal will close
-document.addEventListener('keyup', function (event){
-  if (event.keyCode == 27){
-    document.getElementById("myModal").style.display = "none";
-  }
-})
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-

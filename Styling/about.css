@@ -1,23 +1,56 @@
-#about_us_popup {
-    display: none; /* Hide the popup by default */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    background-color: wheat; /* Add a semi-transparent black overlay */
-    z-index: 999; /* Set a high z-index to make sure the popup is on top of other elements */
-  }
-  
-  #about_us_popup_content {
+  #aboutDiv{
+    background-image: url(https://images4.alphacoders.com/102/1029460.jpg);
+    background-size: cover;
     position: absolute;
     top: 50%;
     left: 50%;
+    height: 80vh;
     transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    max-width: 400px;
+    align-items: center;
+    border-radius: 2vh;
+  }
+  #aboutDiv h1{
+    color: white;
     text-align: center;
+    font-weight: bold;
+    padding: 0 0 1vw 0;
+    border-bottom:  0.2vh solid silver;
+    font-size: 6vh;
   }
+  #aboutDiv h3{
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 0 0 1vw 0;
+    border-bottom:  0.2vh solid silver;
+    font-size: 4vh;
+  }
+  #aboutDiv p{
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 0 0 1vw 0;
+    border-bottom:  0.2vh solid silver;
+    font-size: 3vh;
+  }
+
+  /* #closeButton {
+    margin-top: auto;
+  } */
+
+  #aboutDiv button{
+    width: 20%;
+    height: 6vh;
+    border: 0.2vh solid;
+    background: red;
+    border-radius: 2vh;
+    font-size: 3vh;
+    color: #e9f4fb;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+}
+#aboutDiv button:hover{
+    background: green;
+}
   
-  #closeButton {
-    margin-top: 20px;
-  }
