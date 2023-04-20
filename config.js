@@ -12,4 +12,5 @@ configForm.addEventListener("submit", function(event) {
     fireButton = fireButtonInput.value;
     gameTimeLimit = timeLimit.value * 60 * 1000; // Minutes to miliseconds
     giveFocusToDiv(gameDiv);
+    newGame();
 });

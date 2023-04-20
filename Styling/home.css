@@ -86,15 +86,3 @@ html
 #welcome_register_button:hover {
   background-color: #0056b3;
 }
-
-
-
-
-
-#gameCanvas {
-  /* display:flex;
-  flex: 1 1 auto;
-  border: 1px solid blue;
-  width:80vw; */
-  padding-top: 10vh;
-}
