@@ -1,0 +1,43 @@
+/* Footer styles */
+.footer {
+    background-color: black;
+    padding: 5.5vh;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 8vh;
+    line-height: 5vh;
+    text-align: center;
+    /* border-top: 1px solid #ccc; */
+  }
+  
+  .container {
+    max-width: 120vh;
+    margin: 0 auto;
+  }
+  
+  .social-icons {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .social-icons li {
+    display: inline-block;
+    /* margin: 0 10vh; */
+  }
+  
+  .social-icons img {
+    width: 7vh;
+    height: 7vh;
+  }
+  .social-icons span {
+    display: block;
+    margin-top: 2vh;
+  }
+  .footer label{
+    color: white;
+    font-weight: bold;
+  }
+  
