@@ -86,8 +86,16 @@
         <button id="exitBtn">Exit Game</button>
       </div>
 
+      <div id="end_game_pop_up" style="display: none;">
+        <h1>Are you sure you want to finish the game?</h1>
+        <br/>
+        <button id="end_game_pop_up_continue_button">Continue</button>
+        <br/>
+        <button id="end_game_pop_up_cancel_button">Continue</button>
+      </div>
+
       <div class="center_login" id="loginDiv" style="display: none;">
-        <h1>Welcome Back</h1>
+        <h1>Welcome User</h1>
         <form method="post" onsubmit="return false">
           <div class="txt_field">
             <input type="text" id="loginUsername" required>
@@ -151,6 +159,14 @@
           </div>
           <input type="submit" id="registerSubmit" value="Submit">
         </form>
+      </div>
+
+      <div id="register_pop_up" style="display: none;">
+        <h1>Successfully Registered</h1>
+        <br/>
+        <h3>Welcome to Guardians of the Galaxy game!</h3>
+        <br/>
+        <button id="register_pop_up_continue_button">Continue</button>
       </div>
 
       <div class="center_config" id="configDiv" style="display: none;">
