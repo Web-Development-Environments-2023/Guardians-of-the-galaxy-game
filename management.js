@@ -13,6 +13,9 @@ const loginDiv = document.getElementById("loginDiv");
 var loginUsername = document.getElementById("loginUsername");
 var loginPassword = document.getElementById("loginPassword");
 const loginSubmit = document.getElementById("loginSubmit");
+const login_pop_up = document.getElementById("login_pop_up");
+const login_pop_up_continue_button = document.getElementById("login_pop_up_continue_button");
+
 
 //Register page attributes
 const registerDiv = document.getElementById("registerDiv");
@@ -53,7 +56,7 @@ window.addEventListener("keydown", function(event) {
 });
 
 //Divs
-var appDivs = [logoDiv, loginDiv, registerDiv, configDiv, gameDiv, welcome_login_button, welcome_register_button, footer, endGameDiv] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
+var appDivs = [logoDiv, loginDiv, registerDiv, configDiv, gameDiv, welcome_login_button, welcome_register_button, footer, endGameDiv, login_pop_up] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
 
 //Users dictionary
 var users = {"s" : "s"};
@@ -75,19 +78,28 @@ function giveFocusToDiv(divToFocus) {
 
 //Main page methods
 homeButton.addEventListener("click", function() {giveFocusToDiv(logoDiv)}, false);
-loginButton.addEventListener("click", function() {giveFocusToDiv(loginDiv)}, false);
+loginButton.addEventListener("click", function() {changeLoginText(); giveFocusToDiv(loginDiv)}, false);
 welcome_login_button.addEventListener("click", function() {giveFocusToDiv(loginDiv)}, false);
 registerButton.addEventListener("click", function() {giveFocusToDiv(registerDiv)}, false);
 welcome_register_button.addEventListener("click", function() {giveFocusToDiv(registerDiv)}, false);
 
 //Login page methods
 loginSubmit.addEventListener("click", function() {loginUser(loginUsername.value, loginPassword.value)})
+login_pop_up_continue_button.addEventListener("click", function() {giveFocusToDiv(configDiv)})
+
+function changeLoginText(){
+  loginButton.textContent = "Login";
+  loginUsername.value = ""
+  loginPassword.value = ""
+}
 
 function loginUser(username, password) {
   if (users[username] && users[username] === password) {
     console.log("Login successful.");
-    alert("Nice to see you " + username + "! Configure the game settings and start playing.");
-    giveFocusToDiv(configDiv);
+    var config_h1 = document.querySelector('#configDiv h1'); // Select the h1 element
+    config_h1.textContent = 'Welcome ' + loginUsername.value + "! Please configure the game settings ans start playing.";
+    loginButton.textContent = "Log Out"
+    giveFocusToDiv(login_pop_up);
   } else {
     console.log("Invalid username or password.");
     alert("Invalid username or password. Please try again.");

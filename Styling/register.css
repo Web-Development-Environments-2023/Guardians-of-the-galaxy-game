@@ -1,6 +1,6 @@
 .center_register{
     position: absolute;
-    top: 56%;
+    top: 50%;
     left: 50%;
     height: 90vh;
     transform: translate(-50%, -50%);
