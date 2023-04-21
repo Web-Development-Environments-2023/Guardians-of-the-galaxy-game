@@ -1,5 +1,6 @@
 const configForm = document.getElementById('configForm');
 const startGameButton = document.getElementById("startGameButton");
+const scoresButton = document.getElementById("scoresButton");
 var fireButtonInput;
 const gameDiv = document.getElementById("gameDiv");
 var timeLimit;
@@ -20,3 +21,5 @@ configForm.addEventListener("submit", function(event) {
 
     // newGame();
 });
+
+scoresButton.addEventListener("click", function() {giveFocusToDiv(endGameDiv)})

@@ -1,8 +1,10 @@
 .center_config{
+    background-image: url(https://images4.alphacoders.com/102/1029460.jpg);
+    background-size: cover;
     position: absolute;
     top: 50%;
     left: 50%;
-    height: 50vh;
+    height: 80%;
     transform: translate(-50%, -50%);
     width: 60%;
     background: white;
@@ -18,4 +20,20 @@
 .center_config form{
     padding: 0 5%;
     box-sizing: border-box;
+}
+
+.center_config button{
+    width: 40%;
+    height: 8vh;
+    border: 0.2vh solid;
+    background: red;
+    border-radius: 2vh;
+    font-size: 5vh;
+    color: #e9f4fb;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+}
+.center_config button:hover{
+    background: green;
 }

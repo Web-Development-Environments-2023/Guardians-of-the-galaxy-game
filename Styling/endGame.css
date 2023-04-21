@@ -1,51 +1,65 @@
-#endGameDiv{
+#endGameDiv {
     background-image: url(https://images6.alphacoders.com/103/1033709.jpg);
     background-size: cover;
     position: absolute;
     top: 50%;
     left: 50%;
-    height: 80vh;
+    height: 90%;
+    width: 80%;
     transform: translate(-50%, -50%);
     align-items: center;
     border-radius: 2vh;
-  }
-  #endGameDiv h1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#endGameDiv h1 {
     color: white;
     text-align: center;
     font-weight: bold;
     padding: 0 0 1vw 0;
-    border-bottom:  0.2vh solid silver;
+    border-bottom: 0.2vh solid silver;
     font-size: 6vh;
-  }
-  /* #endGameDiv h3{
+}
+ #endGameDiv h2{
     color: white;
     text-align: center;
     font-weight: bold;
     padding: 0 0 1vw 0;
     border-bottom:  0.2vh solid silver;
     font-size: 4vh;
-  } */
-  #endGameDiv p{
-    color: white;
-    text-align: center;
-    font-weight: bold;
-    padding: 0 0 1vw 0;
-    border-bottom:  0.2vh solid silver;
-    font-size: 3vh;
-  }
+}
 
-  #endGameDiv button{
-    width: 30%;
-    height: 14vh;
+
+#endGameDiv .buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto; /* push buttons to the bottom */
+}
+
+#endGameDiv button {
+    width: 10%;
+    height: 8vh;
     border: 0.2vh solid;
     background: #2691d9;
     border-radius: 2vh;
-    font-size: 3vh;
-    color: #e9f4fb;
-    font-weight: 700;
+    font-size: 2vh;
+    color: black;
+    font-weight: 1000;
     cursor: pointer;
     outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
 }
-#endGameDiv button:hover{
+
+#endGameDiv button:hover {
     background: green;
 }
+
+
+/* scoresButton.addEventListener("click", function() {var end_game_div_h3 = document.querySelector('#endGameDiv h3'); // Select the h1 element
+    end_game_div_h3.textContent = 'Hello ' + username + "! Here you can see all your scores in the game."; giveFocusToDiv(endGameDiv)}) */
