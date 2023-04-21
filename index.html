@@ -99,7 +99,7 @@
 
       <div class="center_login" id="loginDiv" style="display: none;">
         <h1>Welcome To Space! <br/>Please Login</h1>
-        <form method="post" onsubmit="return false">
+        <form method="post" id="login_form" onsubmit="return false">
           <div class="txt_field">
             <input type="text" id="loginUsername" required>
             <span></span>
@@ -124,7 +124,7 @@
 
       <div class="center_register" id="registerDiv" style="display: none;">
         <h1>Register</h1>
-        <form method="post" onsubmit="return false">
+        <form method="post" id="register_form" onsubmit="return false">
           <div class="txt_field">
             <input type="text" required pattern="^[a-zA-Z\s]*$" title="Please enter a correct name with alphabets.">
             <span></span>

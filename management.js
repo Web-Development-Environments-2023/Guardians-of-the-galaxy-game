@@ -55,13 +55,14 @@ welcome_register_button.addEventListener("click", function() {giveFocusToDiv(reg
 
 //Login page 
 const loginDiv = document.getElementById("loginDiv");
+const login_form = document.getElementById("login_form");
 var loginUsername = document.getElementById("loginUsername");
 var loginPassword = document.getElementById("loginPassword");
-const loginSubmit = document.getElementById("loginSubmit");
+// const loginSubmit = document.getElementById("loginSubmit");
 const login_pop_up = document.getElementById("login_pop_up");
 const login_pop_up_continue_button = document.getElementById("login_pop_up_continue_button");
 
-loginSubmit.addEventListener("click", function() {loginUser(loginUsername.value, loginPassword.value)})
+login_form.addEventListener("submit", function() {loginUser(loginUsername.value, loginPassword.value)})
 login_pop_up_continue_button.addEventListener("click", function() {giveFocusToDiv(configDiv)})
 
 function loginUser(username, password) {
@@ -82,14 +83,15 @@ function loginUser(username, password) {
 
 //Register page
 const registerDiv = document.getElementById("registerDiv");
+const register_form = document.getElementById("register_form");
 var registerUsername = document.getElementById("registerUsername");
 var registerPassword = document.getElementById("registerPassword");
 var registerRepeatPassword = document.getElementById("repeat-password");
-const registerSubmit = document.getElementById("registerSubmit");
+// const registerSubmit = document.getElementById("registerSubmit");
 const register_pop_up = document.getElementById("register_pop_up");
 const register_pop_up_continue_button = document.getElementById("register_pop_up_continue_button");
 
-registerSubmit.addEventListener("click", function() {registerUser(registerUsername.value, registerPassword.value, registerRepeatPassword.value)})
+register_form.addEventListener("submit", function() {registerUser(registerUsername.value, registerPassword.value, registerRepeatPassword.value)})
 register_pop_up_continue_button.addEventListener("click", function() {giveFocusToDiv(loginDiv)})
 
 function registerUser(username, password, repeat) {
