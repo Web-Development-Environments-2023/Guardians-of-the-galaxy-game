@@ -97,6 +97,7 @@ const ENEMY_BULLET_BASE_SPEED = [0.5,2];
 const BASE_SPEED_INCREASES = 4;
 const MIN_CANVAS_WIDTH = 1366;
 const MIN_CANVAS_HEIGHT = 768;
+const PLAYER_FIRE_DELAY = 350;
 const livesElement = document.getElementById("LivesText");
 const countdown = document.createElement('div');
 
@@ -109,7 +110,7 @@ var intervalTimer;
 var playerScore;
 var enemyDirection = 1;
 var lastShotTime;
-var gameStartTime;
+// var gameStartTime;
 var gameRemainingTime;
 var currentTickTime;
 var lastTickTime;
@@ -159,7 +160,7 @@ var headerCell4 = headerRow.insertCell();
 
 headerCell1.innerHTML = "Date";
 headerCell2.innerHTML = "Score";
-headerCell3.innerHTML = "Time Left";
+headerCell3.innerHTML = "Time Elapsed";
 headerCell4.innerHTML = "Enemies Left";
 styleTable(scoreTable);
 
@@ -352,7 +353,7 @@ function enemyHitPlayer(enemyIndex, bulletIndex) {
 }
 function handleShipsShooting(currentTickTime) {
     shootingTimeDelta = currentTickTime - lastShotTime
-    if (fireButton in keysDown && shootingTimeDelta > 350) { // Player holding the fire button
+    if (fireButton in keysDown && shootingTimeDelta > PLAYER_FIRE_DELAY) { // Player holding the fire button
 		player.fire(playerBulletSpeed[0], playerBulletSpeed[1]);
         lastShotTime = currentTickTime;
 
@@ -381,7 +382,8 @@ function resetPlayerPosition() {
 function endGame()
 {
     pauseGame();
-    addGameToScoreTable(playerScore, timeLeftInSeconds, enemies.length);
+    timeElapsed = gameTimeLimit - gameRemainingTime;
+    addGameToScoreTable(playerScore, Math.floor(timeElapsed / 1000), enemies.length);
     
     if (playerLives == 0)
         endgameMessage = "You lost";  
@@ -537,9 +539,9 @@ function continueGame() {
     // If equals undefined the game was never started or 
     // paused so cannot be continued.
     if (animationLoop !== 'undefined')                        
-        gameTick();
+        CountdownForContinueGame();
 }
-function addGameToScoreTable(score, timeLeftInSeconds, enemiesLeft) {
+function addGameToScoreTable(score, timeElapsed, enemiesLeft) {
     var newRow = scoreTable.insertRow();
     var cell1 = newRow.insertCell();
     var cell2 = newRow.insertCell();
@@ -554,9 +556,9 @@ function addGameToScoreTable(score, timeLeftInSeconds, enemiesLeft) {
     var month = currentDate.getMonth() + 1; // Month starts from 0, so add 1 to get the actual month
     var day = currentDate.getDate();
 
-    cell1.innerHTML = year + "-" + month + "-" + day
+    cell1.innerHTML = day + "-" + month + "-" + year;
     cell2.innerHTML = score;
-    cell3.innerHTML = timeLeftInSeconds;
+    cell3.innerHTML = timeElapsed;
     cell4.innerHTML = enemiesLeft;
     scores.appendChild(scoreTable);
 }
@@ -589,9 +591,37 @@ function CountdownToStart() {
             playerScore = 0;
             currentTickTime = Date.now();
             lastTickTime = currentTickTime;
-            gameStartTime = currentTickTime;
             lastShotTime = currentTickTime - 500;
             remainingPlayerLives = playerLives;
+            gameTick();
+        }
+    }, 1000);
+}
+function CountdownForContinueGame(){
+    let count = 5;
+    countdown.setAttribute('id', 'countdown');
+    countdown.style.position = 'absolute';
+    countdown.style.top = canvas.offsetTop + canvas.height/2 - 50 + 'px';
+    countdown.style.left = canvas.offsetLeft + canvas.width/2 - 50 + 'px';
+    countdown.style.width = '100px';
+    countdown.style.height = '100px';
+    countdown.style.backgroundColor = 'black';
+    countdown.style.color = 'white';
+    countdown.style.display = 'flex';
+    countdown.style.fontSize = '15vh';
+    countdown.style.alignItems = 'center';
+    countdown.style.justifyContent = 'center';
+    document.body.appendChild(countdown);
+    drawAllElements();
+    const countdownInterval = setInterval(() => {
+        countdown.innerText = count;
+        count--;
+        if (count < 0) {
+            clearInterval(countdownInterval);
+            countdown.remove();
+            currentTickTime = Date.now();
+            lastShotTime = currentTickTime - (PLAYER_FIRE_DELAY / 2); // Player can fire again in half fire cycle time
+            lastTickTime = currentTickTime;
             gameTick();
         }
     }, 1000);

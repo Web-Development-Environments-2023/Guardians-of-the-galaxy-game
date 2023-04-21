@@ -14,9 +14,9 @@ configForm.addEventListener("submit", function(event) {
     timeLimit = document.getElementById("timeLimit");
     fireButton = fireButtonInput.value;
     gameTimeLimit = timeLimit.value * 60 * 1000; // Minutes to miliseconds
-    if (player !== undefined)
+    if (player !== undefined) // If player was  assigned the game started before and should restart
         restartGame();
-    else {
+    else { // Game never started before so do first time setup. 
         setupGame();
         setTimeout(() => {newGame();}, 1000);
     }
