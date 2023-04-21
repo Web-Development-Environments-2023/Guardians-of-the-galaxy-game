@@ -14,9 +14,12 @@ configForm.addEventListener("submit", function(event) {
     timeLimit = document.getElementById("timeLimit");
     fireButton = fireButtonInput.value;
     gameTimeLimit = timeLimit.value * 60 * 1000; // Minutes to miliseconds
-    // setupGame();
-    // setTimeout(() => {newGame();}, 2000);
-    resetGame();
+    if (player !== undefined)
+        restartGame();
+    else {
+        setupGame();
+        setTimeout(() => {newGame();}, 1000);
+    }
     giveFocusToDiv(gameDiv);
 
     // newGame();

@@ -8,10 +8,48 @@ const welcome_login_button = document.getElementById("welcome_login_button");
 const welcome_register_button = document.getElementById("welcome_register_button");
 const footer = document.getElementById("footer");
 
-homeButton.addEventListener("click", function() {if (isGameOn()){giveFocusToDiv(end_game_pop_up)}else{giveFocusToDiv(logoDiv)}}, false);
-loginButton.addEventListener("click", function() {if (isGameOn()){giveFocusToDiv(end_game_pop_up)}else{changeLoginText(); giveFocusToDiv(loginDiv)}}, false);
-welcome_login_button.addEventListener("click", function() {giveFocusToDiv(loginDiv)}, false);
-registerButton.addEventListener("click", function() {giveFocusToDiv(registerDiv)}, false);
+homeButton.addEventListener("click", function() {
+  if (isGameOn()){
+    pauseGame(); 
+    last_div_clicked = logoDiv; 
+    giveFocusToDiv(end_game_pop_up)
+  }else{
+    giveFocusToDiv(logoDiv)}
+  }, false);
+
+loginButton.addEventListener("click", function() {
+  loginUsername.value = ""
+  loginPassword.value = ""
+
+  if (isGameOn()){
+    pauseGame(); 
+    last_div_clicked = loginDiv; 
+    giveFocusToDiv(end_game_pop_up)
+  }else{
+    loginUsername.value = "";
+    loginPassword.value = "";
+    loginButton.textContent = "Login";
+    giveFocusToDiv(loginDiv)
+  }
+}, false);
+
+welcome_login_button.addEventListener("click", function() {
+  loginUsername.value = ""
+  loginPassword.value = ""
+  loginButton.textContent = "Login";
+  giveFocusToDiv(loginDiv)
+}, false);
+
+registerButton.addEventListener("click", function() {
+  if (isGameOn()){
+    pauseGame(); 
+    last_div_clicked = registerDiv; 
+    giveFocusToDiv(end_game_pop_up)
+  }else{
+    giveFocusToDiv(registerDiv)
+  } 
+}, false);
+
 welcome_register_button.addEventListener("click", function() {giveFocusToDiv(registerDiv)}, false);
 
 
@@ -26,18 +64,12 @@ const login_pop_up_continue_button = document.getElementById("login_pop_up_conti
 loginSubmit.addEventListener("click", function() {loginUser(loginUsername.value, loginPassword.value)})
 login_pop_up_continue_button.addEventListener("click", function() {giveFocusToDiv(configDiv)})
 
-function changeLoginText(){
-  loginButton.textContent = "Login";
-  loginUsername.value = ""
-  loginPassword.value = ""
-}
-
 function loginUser(username, password) {
   if (users[username] && users[username] === password) {
     console.log("Login successful.");
     var config_h1 = document.querySelector('#configDiv h1'); // Select the h1 element
     config_h1.textContent = 'Welcome ' + username + "! Please configure the game settings and start playing.";
-    loginButton.textContent = "Log Out"
+    loginButton.textContent = "Log out";
     giveFocusToDiv(login_pop_up);
   } else {
     console.log("Invalid username or password.");
@@ -98,6 +130,7 @@ window.addEventListener("click", function(event) {
 
 // Show the popup when the "About us" button is clicked
 aboutButton.addEventListener('click', function() {
+  last_div_clicked = aboutButton;
   about_us_popup.style.display = 'block';
 });
 
@@ -117,6 +150,18 @@ window.addEventListener("keydown", function(event) {
 const end_game_pop_up = document.getElementById('end_game_pop_up');
 const end_game_pop_up_continue_button = document.getElementById('end_game_pop_up_continue_button');
 const end_game_pop_up_cancel_button = document.getElementById('end_game_pop_up_cancel_button');
+var last_div_clicked;
+
+end_game_pop_up_continue_button.addEventListener('click', function() {
+  if (last_div_clicked === loginDiv){
+    loginUsername.value = ""
+    loginPassword.value = ""
+    loginButton.textContent = "Login";
+  }
+  giveFocusToDiv(last_div_clicked)
+})
+
+end_game_pop_up_cancel_button.addEventListener('click', function() {giveFocusToDiv(gameDiv); continueGame()})
 
 
 //Divs

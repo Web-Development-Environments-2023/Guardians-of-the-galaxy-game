@@ -145,7 +145,7 @@ const restartBtn = document.getElementById("restartBtn")
 const changeConfigBtn = document.getElementById("changeConfigBtn")
 const exitBtn = document.getElementById("exitBtn")
 
-restartBtn.addEventListener("click", function() {resetGame(); giveFocusToDiv(gameDiv)}, false);
+restartBtn.addEventListener("click", function() {restartGame(); giveFocusToDiv(gameDiv)}, false);
 changeConfigBtn.addEventListener("click", function() {pauseGame(); giveFocusToDiv(configDiv)}, false);
 exitBtn.addEventListener("click", function() {pauseGame(); giveFocusToDiv(logoDiv)}, false);
 
@@ -259,26 +259,20 @@ function setupGame() {
 // Called when the game starts.
 function newGame()
 {
-    playerScore = 0;
-    currentTickTime = Date.now();
-    lastTickTime = currentTickTime;
-    gameStartTime = currentTickTime;
-    lastShotTime = currentTickTime - 500;
-    gameRemainingTime = gameTimeLimit;
-    remainingPlayerLives = playerLives;
-    
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
     const canvasWidth = windowWidth - (0.1 * windowWidth);
     const canvasHeight = windowHeight - (0.1 * windowHeight);
     canvas.width = windowWidth;
     canvas.height = windowHeight;
-    
     playerStartingX = ((canvas.width / 2) - (canvasWidth * 0.05));
     playerStartingY = (canvas.height - (canvasHeight * 0.05));
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
     resetPlayerPosition();
+    gameRemainingTime = gameTimeLimit;
+    timeLeftInSeconds = Math.floor(gameTimeLimit / 1000);
+    $("#TimeText").text(timeLeftInSeconds);
     CountdownToStart();
 }
 function gameTick() {
@@ -337,7 +331,19 @@ function enemyHitPlayer(enemyIndex, bulletIndex) {
     enemy = enemies[enemyIndex];
     enemy.bullets.splice(bulletIndex, 1);
     resetPlayerPosition();
-    lastEnemyBulletFired = undefined;
+
+    // update the lastEnemyBulletFired incase there is more than one enemy bullet in game.
+    var farthestBullet = undefined;
+    $.each(enemies, function(j, enemy) {
+        $.each(enemy.bullets, function(i, bullet) {
+            if (farthestBullet === undefined) 
+                farthestBullet = bullet;
+            else if (farthestBullet.y < bullet.y)
+                farthestBullet = bullet;
+        });
+    });
+
+    lastEnemyBulletFired = farthestBullet;
     remainingPlayerLives--;
     livesElement.removeChild(livesElement.lastChild);
     if (remainingPlayerLives == 0) {
@@ -352,8 +358,10 @@ function handleShipsShooting(currentTickTime) {
 
 	}
     if (typeof lastEnemyBulletFired !== 'undefined') {
-        if (lastEnemyBulletFired.y >= canvas.height*0.6)
+        if (lastEnemyBulletFired.y >= canvas.height*0.6) {
+            console.log(lastEnemyBulletFired.y);
             enemyFire();
+        }    
     }
     else
         enemyFire();
@@ -372,6 +380,7 @@ function resetPlayerPosition() {
 }
 function endGame()
 {
+    pauseGame();
     addGameToScoreTable(playerScore, timeLeftInSeconds, enemies.length);
     
     if (playerLives == 0)
@@ -388,7 +397,7 @@ function endGame()
     giveFocusToDiv(endGameDiv)
     //cancelAnimationFrame(animationLoop);
     //window.clearInterval(intervalTimer); 
-    //resetGame();
+    //restartGame();
 }
 function resizeCanvas() {
     const windowWidth = window.innerWidth;
@@ -506,22 +515,23 @@ function updatePlayerPosition() {
             player.update(playerSpeed, 0)
     }
 }
-function resetGame(){
+function restartGame(){
     cancelAnimationFrame(animationLoop);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     enemies.length = 0; // Remove all enemies
     lastEnemyBulletFired = undefined;
     speedIncreases = BASE_SPEED_INCREASES;
+    timerForSpeedIncreases = 0;
     enemySpeed = ENEMY_BASE_SPEED;
-    enemyBulletSpeed = ENEMY_BULLET_BASE_SPEED;
+    enemyBulletSpeed = [ENEMY_BULLET_BASE_SPEED[0],ENEMY_BULLET_BASE_SPEED[1]]; 
     playerScore = 0;
     $('#ScoreText').text(playerScore);
     setupGame();
-    setTimeout(() => {newGame();}, 2000);
-    
+    setTimeout(() => {newGame();}, 1000); // Gives the game a second to load all assets   
 }
 function pauseGame(){
-    cancelAnimationFrame(animationLoop);
+    // cancelAnimationFrame(animationLoop);
+    cancelAnimationFrame(gameTick);
 }
 function continueGame() {
     // If equals undefined the game was never started or 
@@ -576,7 +586,13 @@ function CountdownToStart() {
         if (count < 0) {
             clearInterval(countdownInterval);
             countdown.remove();
-            gameTick()
+            playerScore = 0;
+            currentTickTime = Date.now();
+            lastTickTime = currentTickTime;
+            gameStartTime = currentTickTime;
+            lastShotTime = currentTickTime - 500;
+            remainingPlayerLives = playerLives;
+            gameTick();
         }
     }, 1000);
 }
