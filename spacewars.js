@@ -164,7 +164,7 @@ headerCell4.innerHTML = "Enemies Left";
 styleTable(scoreTable);
 
 function styleTable(table){
-    table.style.fontSize = "5vh";
+    table.style.fontSize = "3vh";
     table.style.color = "white";
     table.style.alignItems = "center";
     table.style.borderCollapse = "collapse";
@@ -177,6 +177,7 @@ function styleTable(table){
     cell.style.padding = "2vh"; // Add padding for spacing
     cell.style.border = "0.5vh solid white"; // Add border for lines between columns
     cell.style.textAlign = "center"; // Center align text in cells
+    cell.style.verticalAlign = "middle"
   }
 
   // Add additional styles to table headers
@@ -186,6 +187,7 @@ function styleTable(table){
     header.style.padding = "2vh"; // Add padding for spacing
     header.style.border = "0.3vh solid white"; // Add border for lines between columns
     header.style.textAlign = "center"; // Center align text in headers
+    header.style.verticalAlign = "middle";
     header.style.backgroundColor = "black"; // Add background color for headers
   }
 
