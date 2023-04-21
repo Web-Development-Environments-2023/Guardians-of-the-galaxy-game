@@ -1,0 +1,48 @@
+#end_game_pop_up{
+    background-image: url(https://images4.alphacoders.com/102/1029460.jpg);
+    background-size: cover;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 80vh;
+    width: 60%;
+    transform: translate(-50%, -50%);
+    align-items: center;
+    border-radius: 2vh;
+  }
+  #end_game_pop_up h1{
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 0 0 1vw 0;
+    border-bottom:  0.2vh solid silver;
+    font-size: 6vh;
+  }
+  #end_game_pop_up h3{
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 0 0 1vw 0;
+    border-bottom:  0.2vh solid silver;
+    font-size: 4vh;
+  }
+
+  #end_game_pop_up button{
+    width: 30%;
+    height: 6vh;
+    left: 50%;
+    bottom: 8vh;
+    border: 0.2vh solid;
+    background: red;
+    border-radius: 2vh;
+    font-size: 3vh;
+    color: #e9f4fb;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+    margin-top: auto;
+}
+#end_game_pop_up button:hover{
+    background: green;
+}
+  

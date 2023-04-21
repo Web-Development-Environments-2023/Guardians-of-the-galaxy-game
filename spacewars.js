@@ -140,27 +140,59 @@ var playerLives = 3;
 var speedIncreases = 4;
 
 // Score table intiallization
-var endGameDiv = document.getElementById("endGameDiv")
+const endGameDiv = document.getElementById("endGameDiv")
+const restartBtn = document.getElementById("restartBtn")
+const changeConfigBtn = document.getElementById("changeConfigBtn")
+const exitBtn = document.getElementById("exitBtn")
+
+restartBtn.addEventListener("click", function() {resetGame(); giveFocusToDiv(gameDiv)}, false);
+changeConfigBtn.addEventListener("click", function() {pauseGame(); giveFocusToDiv(configDiv)}, false);
+exitBtn.addEventListener("click", function() {pauseGame(); giveFocusToDiv(logoDiv)}, false);
+
 var scores = document.getElementById("scores")
 var scoreTable = document.createElement("table");
 var headerRow = scoreTable.insertRow();
 var headerCell1 = headerRow.insertCell();
 var headerCell2 = headerRow.insertCell();
 var headerCell3 = headerRow.insertCell();
-headerCell1.innerHTML = "Score";
-headerCell2.innerHTML = "Time Left";
-headerCell3.innerHTML = "Enemies Left";
+var headerCell4 = headerRow.insertCell();
+
+headerCell1.innerHTML = "Date";
+headerCell2.innerHTML = "Score";
+headerCell3.innerHTML = "Time Left";
+headerCell4.innerHTML = "Enemies Left";
 styleTable(scoreTable);
 
 function styleTable(table){
     table.style.fontSize = "5vh";
     table.style.color = "white";
     table.style.alignItems = "center";
+    table.style.borderCollapse = "collapse";
+    table.style.width = "100%";
+
+    // Add additional styles to table cells (header and body)
+  var cells = table.getElementsByTagName("td");
+  for (var i = 0; i < cells.length; i++) {
+    var cell = cells[i];
+    cell.style.padding = "2vh"; // Add padding for spacing
+    cell.style.border = "0.5vh solid white"; // Add border for lines between columns
+    cell.style.textAlign = "center"; // Center align text in cells
+  }
+
+  // Add additional styles to table headers
+  var headers = table.getElementsByTagName("th");
+  for (var i = 0; i < headers.length; i++) {
+    var header = headers[i];
+    header.style.padding = "2vh"; // Add padding for spacing
+    header.style.border = "0.3vh solid white"; // Add border for lines between columns
+    header.style.textAlign = "center"; // Center align text in headers
+    header.style.backgroundColor = "black"; // Add background color for headers
+  }
 
 }
 
 
-window.addEventListener("load", setupGame, false);
+// window.addEventListener("load", setupGame, false);
 addEventListener("keydown", function (e) {keysDown[e.key] = true;}, false);
 addEventListener("keyup", function (e) {delete keysDown[e.key];}, false);
 
@@ -500,10 +532,20 @@ function addGameToScoreTable(score, timeLeftInSeconds, enemiesLeft) {
     var cell1 = newRow.insertCell();
     var cell2 = newRow.insertCell();
     var cell3 = newRow.insertCell();
+    var cell4 = newRow.insertCell();
 
-    cell1.innerHTML = score;
-    cell2.innerHTML = timeLeftInSeconds;
-    cell3.innerHTML = enemiesLeft;
+        // Get the current date
+    var currentDate = new Date();
+
+    // Extract various components of the date
+    var year = currentDate.getFullYear();
+    var month = currentDate.getMonth() + 1; // Month starts from 0, so add 1 to get the actual month
+    var day = currentDate.getDate();
+
+    cell1.innerHTML = year + "-" + month + "-" + day
+    cell2.innerHTML = score;
+    cell3.innerHTML = timeLeftInSeconds;
+    cell4.innerHTML = enemiesLeft;
     scores.appendChild(scoreTable);
 }
 function emptyScoreTable() {

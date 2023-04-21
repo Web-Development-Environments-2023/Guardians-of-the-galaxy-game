@@ -113,12 +113,15 @@ window.addEventListener("keydown", function(event) {
   }
 });
 
-
-//Divs
-var appDivs = [logoDiv, loginDiv, registerDiv, configDiv, gameDiv, welcome_login_button, welcome_register_button, footer, endGameDiv, login_pop_up, register_pop_up] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
+//End Game
 const end_game_pop_up = document.getElementById('end_game_pop_up');
 const end_game_pop_up_continue_button = document.getElementById('end_game_pop_up_continue_button');
 const end_game_pop_up_cancel_button = document.getElementById('end_game_pop_up_cancel_button');
+
+
+//Divs
+var appDivs = [logoDiv, loginDiv, registerDiv, configDiv, gameDiv, welcome_login_button, 
+  welcome_register_button, footer, endGameDiv, login_pop_up, register_pop_up, end_game_pop_up] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
 
 function giveFocusToDiv(divToFocus) {
   for(let i=0; i<appDivs.length; i++) {
