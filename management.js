@@ -78,7 +78,7 @@ function registerUser(username, password, repeat) {
     users[username] = password
     console.log("User registered successfully.");
     var pop_up_h1 = document.querySelector('#register_pop_up h1'); // Select the h1 element
-    pop_up_h1.textContent = 'Welcome ' + username + "to Guardians of the Galaxy game! Please login and start playing.";
+    pop_up_h1.textContent = 'Hello ' + username + "! Welcome to Guardians of the Galaxy game!";
     giveFocusToDiv(register_pop_up)
   }
 }
