@@ -2,7 +2,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    height: 55vh;
+    height: 60%;
     transform: translate(-50%, -50%);
     width: 100vh;
     background: white;
@@ -75,7 +75,7 @@ form .txt_field{
     background-color: green;
 }
 input[type="submit"]{
-    width: 100%;
+    width: 40%;
     height: 8vh;
     border: 0.2vh solid;
     background: #2691d9;
