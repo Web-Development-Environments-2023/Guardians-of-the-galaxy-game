@@ -194,6 +194,9 @@ function styleTable(table){
 
 }
 
+enemyImagesDict = {0:"./Images/enemy4.png",1:"./Images/enemy3.png",
+                   2:"./Images/enemy2.png",3:"./Images/enemy1.png" };
+
 
 // window.addEventListener("load", setupGame, false);
 addEventListener("keydown", function (e) {keysDown[e.key] = true;}, false);
@@ -240,7 +243,7 @@ function setupGame() {
                                         enemySpeed,
                                         enemyBulletColor,
                                         canvas.height,
-                                        './Images/enemy.png'));
+                                        enemyImagesDict[i]));
         }
     }
     // Add hearts as lives indication at the top of the canvas
