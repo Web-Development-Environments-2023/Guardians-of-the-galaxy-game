@@ -379,6 +379,7 @@ function resetPlayerPosition() {
 function endGame()
 {
     pauseGame();
+    stopAudio(game_audio)
     timeElapsed = gameTimeLimit - gameRemainingTime;
     addGameToScoreTable(playerScore, Math.floor(timeElapsed / 1000), enemies.length);
     
@@ -533,6 +534,7 @@ function restartGame(){
 }
 function pauseGame(){
     // cancelAnimationFrame(animationLoop);
+    pauseAudio(game_audio)
     cancelAnimationFrame(gameTick);
 }
 function continueGame() {
@@ -568,6 +570,8 @@ function emptyScoreTable() {
         scoreTable.removeChild(scoreTable.firstChild);
 }
 function CountdownToStart() {
+    stopAudio(game_audio)
+    playAudio(game_audio, 0.5)
     let count = 5;
     countdown.setAttribute('id', 'countdown');
     countdown.style.position = 'absolute';
@@ -599,6 +603,7 @@ function CountdownToStart() {
     }, 1000);
 }
 function CountdownForContinueGame(){
+    playAudio(game_audio, 0.5)
     let count = 5;
     countdown.setAttribute('id', 'countdown');
     countdown.style.position = 'absolute';
