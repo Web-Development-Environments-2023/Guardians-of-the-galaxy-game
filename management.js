@@ -14,6 +14,10 @@ homeButton.addEventListener("click", function() {
     last_div_clicked = logoDiv; 
     giveFocusToDiv(end_game_pop_up)
   }else{
+    loginUsername.value = ""
+    loginPassword.value = ""
+    loginButton.textContent = "Login";
+    last_div_clicked = logoDiv;
     giveFocusToDiv(logoDiv)}
   }, false);
 
@@ -26,9 +30,8 @@ loginButton.addEventListener("click", function() {
     last_div_clicked = loginDiv; 
     giveFocusToDiv(end_game_pop_up)
   }else{
-    loginUsername.value = "";
-    loginPassword.value = "";
     loginButton.textContent = "Login";
+    last_div_clicked = loginDiv;
     giveFocusToDiv(loginDiv)
   }
 }, false);
@@ -37,6 +40,7 @@ welcome_login_button.addEventListener("click", function() {
   loginUsername.value = ""
   loginPassword.value = ""
   loginButton.textContent = "Login";
+  last_div_clicked = loginDiv;
   giveFocusToDiv(loginDiv)
 }, false);
 
@@ -46,11 +50,15 @@ registerButton.addEventListener("click", function() {
     last_div_clicked = registerDiv; 
     giveFocusToDiv(end_game_pop_up)
   }else{
+    loginUsername.value = "";
+    loginPassword.value = "";
+    loginButton.textContent = "Login";
+    last_div_clicked = registerDiv;
     giveFocusToDiv(registerDiv)
   } 
 }, false);
 
-welcome_register_button.addEventListener("click", function() {giveFocusToDiv(registerDiv)}, false);
+welcome_register_button.addEventListener("click", function() {last_div_clicked = registerDiv;; giveFocusToDiv(registerDiv)}, false);
 
 
 //Login page 
@@ -58,7 +66,6 @@ const loginDiv = document.getElementById("loginDiv");
 const login_form = document.getElementById("login_form");
 var loginUsername = document.getElementById("loginUsername");
 var loginPassword = document.getElementById("loginPassword");
-// const loginSubmit = document.getElementById("loginSubmit");
 const login_pop_up = document.getElementById("login_pop_up");
 const login_pop_up_continue_button = document.getElementById("login_pop_up_continue_button");
 
@@ -87,7 +94,6 @@ const register_form = document.getElementById("register_form");
 var registerUsername = document.getElementById("registerUsername");
 var registerPassword = document.getElementById("registerPassword");
 var registerRepeatPassword = document.getElementById("repeat-password");
-// const registerSubmit = document.getElementById("registerSubmit");
 const register_pop_up = document.getElementById("register_pop_up");
 const register_pop_up_continue_button = document.getElementById("register_pop_up_continue_button");
 
@@ -133,7 +139,8 @@ window.addEventListener("click", function(event) {
 // Show the popup when the "About us" button is clicked
 aboutButton.addEventListener('click', function() {
   last_div_clicked = aboutButton;
-  about_us_popup.style.display = 'block';
+  about_us_popup.style.display="block"
+  // giveFocusToDiv(about_us_popup)
 });
 
 // Hide the popup when the close button is clicked
@@ -152,22 +159,49 @@ window.addEventListener("keydown", function(event) {
 const end_game_pop_up = document.getElementById('end_game_pop_up');
 const end_game_pop_up_continue_button = document.getElementById('end_game_pop_up_continue_button');
 const end_game_pop_up_cancel_button = document.getElementById('end_game_pop_up_cancel_button');
+
+const restart_game_button = document.getElementById('restart_game_button');
+
+restart_game_button.addEventListener("click", function() {restartGame(); giveFocusToDiv(gameDiv)}, false);
+
+const endGameDiv = document.getElementById("endGameDiv")
+const restartBtn = document.getElementById("restartBtn")
+const changeConfigBtn = document.getElementById("changeConfigBtn")
+const exitBtn = document.getElementById("exitBtn")
+
+restartBtn.addEventListener("click", function() {restartGame(); giveFocusToDiv(gameDiv)}, false);
+changeConfigBtn.addEventListener("click", function() {pauseGame(); giveFocusToDiv(configDiv)}, false);
+exitBtn.addEventListener("click", function() {
+  pauseGame(); 
+  loginUsername.value = ""
+  loginPassword.value = ""
+  loginButton.textContent = "Login";
+  giveFocusToDiv(logoDiv)
+}, false);
+
 var last_div_clicked;
 
 end_game_pop_up_continue_button.addEventListener('click', function() {
-  if (last_div_clicked === loginDiv){
+  if (last_div_clicked === about_us_popup){
+    pauseGame()
+    last_div_clicked = about_us_popup;
+    giveFocusToDiv(about_us_popup)
+  }
+  else{
     loginUsername.value = ""
     loginPassword.value = ""
     loginButton.textContent = "Login";
+    
   }
   giveFocusToDiv(last_div_clicked)
+  
 })
 
 end_game_pop_up_cancel_button.addEventListener('click', function() {giveFocusToDiv(gameDiv); continueGame()})
 
 
 //Divs
-var appDivs = [logoDiv, loginDiv, registerDiv, configDiv, gameDiv, welcome_login_button, 
+var appDivs = [logoDiv, loginDiv, registerDiv, configDiv, gameDiv, welcome_login_button, about_us_popup,
   welcome_register_button, footer, endGameDiv, login_pop_up, register_pop_up, end_game_pop_up] //ADD MORE DIVS WHEN THEY ARE ADDED TO THE APP!!
 
 function giveFocusToDiv(divToFocus) {
@@ -181,6 +215,9 @@ function giveFocusToDiv(divToFocus) {
   if (divToFocus != gameDiv){
     footer.style.display="block"
   }
+  // if (divToFocus === about_us_popup){
+  //   last_div_clicked.style.display="block"
+  // }
   
   divToFocus.style.display="block"
 }

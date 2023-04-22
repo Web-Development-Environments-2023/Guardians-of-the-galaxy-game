@@ -4,8 +4,9 @@
     <link rel="shortcut icon" type="image/x-icon" href="https://images5.alphacoders.com/859/859417.jpg">
     <link rel="shortcut icon" type="image/x-icon" href="https://images6.alphacoders.com/103/1033709.jpg">
     <link rel="shortcut icon" type="image/x-icon" href="https://images4.alphacoders.com/102/1029460.jpg">
+    <link rel="shortcut icon" type="image/x-icon" href="https://images4.alphacoders.com/706/706163.jpg">
 
-    <!-- <link rel="shortcut icon" type="image/x-icon" href="https://images.pling.com/img/00/00/63/00/40/1662284/747f5fe2a9f88f827009192082476067f10bfe1cf8dc59f69896fdde527647228d94.jpg"> -->
+    <link rel="shortcut icon" type="image/x-icon" href="https://images.pling.com/img/00/00/63/00/40/1662284/747f5fe2a9f88f827009192082476067f10bfe1cf8dc59f69896fdde527647228d94.jpg">
     <meta charset="UTF-8">
     <title>Space Invaders Game</title>
     <link rel="stylesheet" type="text/css" href="Styling/home.css" />
@@ -75,14 +76,15 @@
           <span id="TimeText" style="margin-right: 2vh;">0</span>
           <span>Player Lives Left:</span> 
           <span id="LivesText"> </span>
+          <button id="restart_game_button">Restart Game</button>
         </p>
         <canvas id="gameCanvas"></canvas>
       </div>
 
       <div id="endGameDiv" style="display: none;">
-        <h1>My Scores</h1>
+        <h1>Play to see your scores</h1>
         <br/>
-        <h2></h2>
+        <h2>My Scores</h2>
         <div id="scores"></div>
         <button id="restartBtn">Restart Game</button>
         <button id="changeConfigBtn">Back to Game Settings</button>
@@ -185,8 +187,9 @@
             <span></span>
             <label>Choose game time limit (in minutes, minimum=2):</label>
           </div>
-          <input type="submit" id="startGameButton" value="Start Game">
           <button id="scoresButton">My Scores</button>
+          <input type="submit" id="startGameButton" value="Start Game">
+          
         </form>
       </div>
 

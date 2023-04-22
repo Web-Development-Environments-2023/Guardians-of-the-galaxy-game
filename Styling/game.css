@@ -3,6 +3,8 @@
     flex: 1 1 auto;
     border: 1px solid blue;
     width:80vw; */
+    background-image: url(https://images4.alphacoders.com/706/706163.jpg);
+    background-size: cover;
     top: 4vh;
     bottom: 3vh;
     width: 100%;
@@ -15,3 +17,25 @@
     padding-top: 4vh; 
     font-size: 2vh;
 }
+
+#gameDiv button{
+    position: fixed;
+    top: 90%;
+    left: 5%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 1vh 3vh;
+    font-size: 2vh;
+    font-weight: bold;
+    background-color: blue;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 2vh;
+  }
+  
+  /* Hover effect for the button */
+  #gameDiv button:hover {
+    background-color: green;
+  }
+  

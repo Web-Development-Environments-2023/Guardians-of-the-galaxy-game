@@ -1,5 +1,5 @@
 const configForm = document.getElementById('configForm');
-const startGameButton = document.getElementById("startGameButton");
+// const startGameButton = document.getElementById("startGameButton");
 const scoresButton = document.getElementById("scoresButton");
 var fireButtonInput;
 const gameDiv = document.getElementById("gameDiv");

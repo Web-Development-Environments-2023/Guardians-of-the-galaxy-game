@@ -141,15 +141,6 @@ var playerLives = 3;
 var speedIncreases = 4;
 
 // Score table intiallization
-const endGameDiv = document.getElementById("endGameDiv")
-const restartBtn = document.getElementById("restartBtn")
-const changeConfigBtn = document.getElementById("changeConfigBtn")
-const exitBtn = document.getElementById("exitBtn")
-
-restartBtn.addEventListener("click", function() {restartGame(); giveFocusToDiv(gameDiv)}, false);
-changeConfigBtn.addEventListener("click", function() {pauseGame(); giveFocusToDiv(configDiv)}, false);
-exitBtn.addEventListener("click", function() {pauseGame(); giveFocusToDiv(logoDiv)}, false);
-
 var scores = document.getElementById("scores")
 var scoreTable = document.createElement("table");
 var headerRow = scoreTable.insertRow();
@@ -165,20 +156,23 @@ headerCell4.innerHTML = "Enemies Left";
 styleTable(scoreTable);
 
 function styleTable(table){
-    table.style.fontSize = "3vh";
+    table.style.fontSize = "2vh";
+    table.style.fontWeight = "bold";
     table.style.color = "white";
     table.style.alignItems = "center";
     table.style.borderCollapse = "collapse";
     table.style.width = "100%";
 
-    // Add additional styles to table cells (header and body)
+  // Add additional styles to table cells (header and body)
   var cells = table.getElementsByTagName("td");
   for (var i = 0; i < cells.length; i++) {
     var cell = cells[i];
     cell.style.padding = "2vh"; // Add padding for spacing
-    cell.style.border = "0.5vh solid white"; // Add border for lines between columns
+    cell.style.border = "0.3vh solid white"; // Add border for lines between columns
     cell.style.textAlign = "center"; // Center align text in cells
     cell.style.verticalAlign = "middle"
+    cell.style.alignItems = "center";
+    cell.style.borderCollapse = "collapse";
   }
 
   // Add additional styles to table headers
@@ -397,7 +391,10 @@ function endGame()
     else if (timeLeftInSeconds <= 0 && playerScore >= 100)
         endgameMessage = "Winner!";
     else
-        endgameMessage = "endGame";
+        endgameMessage = "End Game";
+
+    var h1_div_message = document.querySelector('#endGameDiv h1');
+    h1_div_message.textContent = endgameMessage;
 
     giveFocusToDiv(endGameDiv)
     //cancelAnimationFrame(animationLoop);
@@ -563,6 +560,7 @@ function addGameToScoreTable(score, timeElapsed, enemiesLeft) {
     cell2.innerHTML = score;
     cell3.innerHTML = timeElapsed;
     cell4.innerHTML = enemiesLeft;
+
     scores.appendChild(scoreTable);
 }
 function emptyScoreTable() {
@@ -631,7 +629,21 @@ function CountdownForContinueGame(){
 }
 function drawAllElements(){
     // Draw elements
-    ctx.fillStyle = backgroundColor;
+    const img = new Image();
+    img.src = 'https://images.pling.com/img/00/00/63/00/40/1662284/747f5fe2a9f88f827009192082476067f10bfe1cf8dc59f69896fdde527647228d94.jpg';
+
+    // Wait for the image to load
+    img.onload = function() {
+        // Create a pattern with the image
+        const pattern = ctx.createPattern(img, 'repeat');
+    
+        // Set the fill style to the image pattern
+        ctx.fillStyle = pattern;
+    
+        // Fill the canvas with the image pattern
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    };
+    // ctx.fillStyle = backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     player.draw(ctx)
     $.each(enemies, function(i, enemy) {
