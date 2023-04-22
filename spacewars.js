@@ -26,10 +26,10 @@ class GameObject {
 class SpaceShip extends GameObject {
     constructor(x, y, width, height, color, speed,
                 bulletColor, bulletRadius, canvasHeight, imageSource) {
-        super(x, y, width, height, color, speed);
+        super(x, y, height, width, color, speed);
         this.canvasHeight = canvasHeight;
-        this.bulletWidth = 4;
-        this.bulletHeight = 8;
+        this.bulletWidth = '8';
+        this.bulletHeight = '20';
         this.color = color;
         this.bulletColor = bulletColor;
         this.bulletRadius = bulletRadius;
@@ -67,9 +67,11 @@ class SpaceShip extends GameObject {
             this.bulletWidth,
             this.bulletHeight,
             this.bulletColor,
-            enemySpeed,
+            enemySpeed, // BUGGGGGGGGGGGG````````````````````````````````````````````````````````````````````````````````````````
             dx,
-            dy
+            dy,
+            this.bulletRadius,
+            1
       ));
     }
 }
@@ -78,14 +80,27 @@ class Player extends SpaceShip {
                 bulletColor, bulletRadius, canvasHeight, imageSource) {
         super(x, y, width, height, color, speed, bulletColor, bulletRadius, canvasHeight, imageSource);
     }
+    fire(dx,dy) {
+        this.bullets.push(new RoundBullet(
+            this.x + this.width / 2 - this.bulletWidth / 2,
+            this.y - this.bulletHeight,
+            this.bulletColor,
+            enemySpeed, // BUGGGGGGGGGGGG````````````````````````````````````````````````````````````````````````````````````````
+            dx,
+            dy,
+            this.bulletRadius,
+            1
+      ));
+    }
 }
 class Bullet extends GameObject {
-    constructor(x, y, width, height, color, speed, dx, dy, radius) {
-        super(x, y, width, height, color, speed);
+    constructor(x, y, width, height, color, speed, dx, dy, radius, opacity) {
+        super(x, y, height, width, color, speed);
         // Set the bullet's x and y directions.
         this.dx = dx;
         this.dy = dy;
         this.radius = radius;
+        this.opacity = opacity;
     }
     
     update(dx, dy) {
@@ -94,11 +109,34 @@ class Bullet extends GameObject {
     }
 
     draw(ctx) {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+}
+class RoundBullet extends GameObject {
+    constructor(x, y, color, speed, dx, dy, radius, opacity) {
+        super(x, y, radius, radius, color, speed);
+        // Set the bullet's x and y directions.
+        this.dx = dx;
+        this.dy = dy;
+        this.radius = radius;
+        this.opacity = opacity;
+    }
+    
+    update(dx, dy) {
+        this.x += this.dx;
+        this.y += this.dy; 
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.closePath;
+        ctx.restore();
     }
 }
 
@@ -115,13 +153,13 @@ const countdown = document.createElement('div');
 var canvas;
 var ctx;
 var enemies = [];
+var backgroundStars = [];
 var player;
 var keysDown = {};
 var intervalTimer;
 var playerScore;
 var enemyDirection = 1;
 var lastShotTime;
-// var gameStartTime;
 var gameRemainingTime;
 var currentTickTime;
 var lastTickTime;
@@ -166,41 +204,8 @@ headerCell3.innerHTML = "Time Elapsed";
 headerCell4.innerHTML = "Enemies Left";
 styleTable(scoreTable);
 
-const backgroundImage = new Image();
-backgroundImage.src = 'https://images.pling.com/img/00/00/63/00/40/1662284/747f5fe2a9f88f827009192082476067f10bfe1cf8dc59f69896fdde527647228d94.jpg';
-
-function styleTable(table){
-    table.style.fontSize = "2vh";
-    table.style.fontWeight = "bold";
-    table.style.color = "white";
-    table.style.alignItems = "center";
-    table.style.borderCollapse = "collapse";
-    table.style.width = "100%";
-
-  // Add additional styles to table cells (header and body)
-  var cells = table.getElementsByTagName("td");
-  for (var i = 0; i < cells.length; i++) {
-    var cell = cells[i];
-    cell.style.padding = "2vh"; // Add padding for spacing
-    cell.style.border = "0.3vh solid white"; // Add border for lines between columns
-    cell.style.textAlign = "center"; // Center align text in cells
-    cell.style.verticalAlign = "middle"
-    cell.style.alignItems = "center";
-    cell.style.borderCollapse = "collapse";
-  }
-
-  // Add additional styles to table headers
-  var headers = table.getElementsByTagName("th");
-  for (var i = 0; i < headers.length; i++) {
-    var header = headers[i];
-    header.style.padding = "2vh"; // Add padding for spacing
-    header.style.border = "0.3vh solid white"; // Add border for lines between columns
-    header.style.textAlign = "center"; // Center align text in headers
-    header.style.verticalAlign = "middle";
-    header.style.backgroundColor = "black"; // Add background color for headers
-  }
-
-}
+//const backgroundImage = new Image();
+//backgroundImage.src = 'https://images.pling.com/img/00/00/63/00/40/1662284/747f5fe2a9f88f827009192082476067f10bfe1cf8dc59f69896fdde527647228d94.jpg';
 
 enemyImagesDict = {0:"./Images/enemy4.png",1:"./Images/enemy3.png",
                    2:"./Images/enemy2.png",3:"./Images/enemy1.png" };
@@ -264,6 +269,20 @@ function setupGame() {
         heartImg.style.height = "2vh";
         heartImg.style.width = "2vh";
         livesElement.appendChild(heartImg);
+    }
+
+
+    for(let i = 0; i < 200; i++) {
+        backgroundStars.push(new RoundBullet(
+            Math.random() * canvas.width,
+            Math.random() * canvas.height,
+            '#ffffff',
+            enemySpeed,
+            0,
+            Math.random() * 2,
+            Math.random() * 4,
+            0.5
+      ));
     }
 
 	// Reset keysDown
@@ -373,7 +392,6 @@ function handleShipsShooting(currentTickTime) {
 	}
     if (typeof lastEnemyBulletFired !== 'undefined') {
         if (lastEnemyBulletFired.y >= canvas.height*0.6) {
-            console.log(lastEnemyBulletFired.y);
             enemyFire();
         }    
     }
@@ -420,32 +438,34 @@ function resizeCanvas() {
     const windowHeight = window.innerHeight;
   
     // Calculate the canvas size based on the window size
-
-
     const canvasWidth = windowWidth - (0.1 * windowWidth);
     const canvasHeight = windowHeight - (0.1 * windowHeight);
-  
-    // Set the canvas size
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     
-    // Update canvas size for objects
+    // Adjust player's starting position for the new canvas size
     playerStartingX = ((canvas.width / 2) - (canvasWidth * 0.05));
     playerStartingY = (canvas.height - (canvasHeight * 0.05));
 
+    // Adjust enemy size
     enemies.forEach(function (enemy, i) {
         enemy.canvasHeight = canvasHeight;
         enemy.height = canvasHeight * 0.05;
         enemy.width = canvasHeight * 0.05;
     });
 
+    // Adjust player size
     player.canvasHeight = canvasHeight;
     player.height = canvasHeight * 0.05;
     player.width = canvasHeight * 0.05;
+    
+    // Check if player is now out of canvas
     if (player.y + player.height > canvasHeight) 
         player.y = playerStartingY;
     if (player.x + player.width > canvasWidth)
         player.x = canvasWidth - 50;
+    
+    drawAllElements();
 }
 function increaseEnemySpeed() {
     enemySpeed += 0.4;
@@ -643,14 +663,57 @@ function CountdownForContinueGame(){
     }, 1000);
 }
 function drawAllElements(){
-    const pattern = ctx.createPattern(backgroundImage, 'repeat');
-    ctx.fillStyle = pattern;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    // ctx.fillStyle = backgroundColor;
+    //const pattern = ctx.createPattern(backgroundImage, 'repeat');
+    //ctx.fillStyle = pattern;
     //ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    $.each(backgroundStars, function(i, star) {
+        star.draw(ctx);
+        star.update();
+        if (star.y > canvas.height) {
+            star.y = 0;
+            star.x = Math.random() * canvas.width;
+        }    
+    });
+    
     player.draw(ctx)
+
     $.each(enemies, function(i, enemy) {
         enemy.update(enemyDirection * enemySpeed, 0);
         enemy.draw(ctx);
     });
+    
+}
+function styleTable(table){
+    table.style.fontSize = "2vh";
+    table.style.fontWeight = "bold";
+    table.style.color = "white";
+    table.style.alignItems = "center";
+    table.style.borderCollapse = "collapse";
+    table.style.width = "100%";
+
+  // Add additional styles to table cells (header and body)
+  var cells = table.getElementsByTagName("td");
+  for (var i = 0; i < cells.length; i++) {
+    var cell = cells[i];
+    cell.style.padding = "2vh"; // Add padding for spacing
+    cell.style.border = "0.3vh solid white"; // Add border for lines between columns
+    cell.style.textAlign = "center"; // Center align text in cells
+    cell.style.verticalAlign = "middle"
+    cell.style.alignItems = "center";
+    cell.style.borderCollapse = "collapse";
+  }
+
+  // Add additional styles to table headers
+  var headers = table.getElementsByTagName("th");
+  for (var i = 0; i < headers.length; i++) {
+    var header = headers[i];
+    header.style.padding = "2vh"; // Add padding for spacing
+    header.style.border = "0.3vh solid white"; // Add border for lines between columns
+    header.style.textAlign = "center"; // Center align text in headers
+    header.style.verticalAlign = "middle";
+    header.style.backgroundColor = "black"; // Add background color for headers
+  }
 }
