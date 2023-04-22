@@ -201,6 +201,8 @@ end_game_pop_up_cancel_button.addEventListener('click', function() {giveFocusToD
 
 //Audio
 var game_audio = document.getElementById("game_audio")
+var player_dead_audio = document.getElementById("player_dead_audio")
+var enemy_dead_audio = document.getElementById("enemy_dead_audio")
 
 function playAudio(audio, volume) {
   audio.volume = volume;
