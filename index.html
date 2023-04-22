@@ -5,6 +5,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="https://images6.alphacoders.com/103/1033709.jpg">
     <link rel="shortcut icon" type="image/x-icon" href="https://images4.alphacoders.com/102/1029460.jpg">
     <link rel="shortcut icon" type="image/x-icon" href="https://images4.alphacoders.com/706/706163.jpg">
+    <link rel="shortcut icon" type="image/x-icon" href="https://images4.alphacoders.com/556/556993.jpg">
 
     <link rel="shortcut icon" type="image/x-icon" href="https://images.pling.com/img/00/00/63/00/40/1662284/747f5fe2a9f88f827009192082476067f10bfe1cf8dc59f69896fdde527647228d94.jpg">
     <meta charset="UTF-8">
@@ -191,10 +192,51 @@
             <span></span>
             <label>Choose game time limit (minimum 2 minutes):</label>
           </div>
+          <div class="selector">
+            <div id="selectField">
+              <p id="selectText">Select Your Player</p>
+              <img src="Images/arrow.png" id="arrowIcon">
+            </div>
+            <ul id="list" class="hide">
+              <li class="options">
+                <img src="Images/player1.png">
+                <p>Star Lord</p>
+              </li>
+              <li class="options">
+                <img src="Images/player2.png">
+                <p>Rocket Raccoon</p>
+              </li>
+              <li class="options">
+                <img src="Images/player3.png">
+                <p>Groot</p>
+              </li>
+            </ul>
+          </div>
           <input type="submit" id="startGameButton" value="Start Game">
-          <!-- <button id="scoresButton">My Scores</button>    -->
         </form>
       </div>
+
+      <script>
+        var selectField = document.getElementById("selectField")
+        var selectText = document.getElementById("selectText")
+        var options = document.getElementsByClassName("options")
+        var list = document.getElementById("list")
+        var arrowIcon = document.getElementById("arrowIcon")
+        
+
+        selectField.onclick = function(){
+          list.classList.toggle("hide")
+          arrowIcon.classList.toggle("rotate")
+        }
+
+        for (option of options){
+          option.onclick = function(){
+            selectText.innerHTML = this.textContent;
+            list.classList.toggle("hide")
+            arrowIcon.classList.toggle("rotate")
+          }
+        }
+      </script>
 
 
       <footer id="footer" class="footer">

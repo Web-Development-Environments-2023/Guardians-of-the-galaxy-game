@@ -6,9 +6,14 @@
     left: 50%;
     height: 80%;
     transform: translate(-50%, -50%);
-    width: 60%;
+    width: 80%;
     background: white;
     border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    
 }
 .center_config h1{
     text-align: center;
@@ -20,20 +25,62 @@
 .center_config form{
     padding: 0 5%;
     box-sizing: border-box;
+    overflow: auto;
 }
 
-.center_config button{
-    width: 40%;
-    height: 8vh;
-    border: 0.2vh solid;
-    background: red;
-    border-radius: 2vh;
-    font-size: 5vh;
-    color: #e9f4fb;
-    font-weight: 700;
+.selector{
+    width: 60%;
+}
+
+#selectField {
+    width: 100%;
+    background-color: #c43885;
+    padding: 2vw 3vw;
+    margin-bottom: 4vh;
+    box-sizing: border-box;
+    border-radius: 6px;
+    font-size: 3vh;
+    font-weight: bold;
+    margin-bottom: 3vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     cursor: pointer;
-    outline: none;
+    /* background: rgba(255, 255, 255, 0.7); */
 }
-.center_config button:hover{
-    background: green;
+#selectField img{
+    width: 3vh;
+    transition: transform 0.5s;
 }
+#list{
+    width: 100%;
+    border-radius: 6px;
+    overflow: hidden;
+}
+.options{
+    width: 100%;
+    background-color: #747f81;
+    padding: 3vw 0 3vh 15vh;
+    list-style: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    position: relative;
+    font-size: 3vh;
+    font-weight: bold;
+}
+.options img{
+    width: 6vh;
+    position: absolute;
+    top: 3vh;
+    left: 5vh;
+}
+.options:hover{
+    background: rgba(57, 117, 67, 0.7);
+}
+.hide{
+    visibility: hidden;
+}
+.rotate{
+    transform: rotate(180deg);
+}
+  
