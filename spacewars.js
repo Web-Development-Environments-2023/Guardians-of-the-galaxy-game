@@ -25,13 +25,15 @@ class GameObject {
 }
 class SpaceShip extends GameObject {
     constructor(x, y, width, height, color, speed,
-                bulletColor, canvasHeight, imageSource) {
+                bulletColor, bulletRadius, canvasHeight, imageSource) {
         super(x, y, width, height, color, speed);
         this.canvasHeight = canvasHeight;
         this.bulletWidth = 4;
         this.bulletHeight = 8;
         this.color = color;
         this.bulletColor = bulletColor;
+        this.bulletRadius = bulletRadius;
+
         this.bullets = [];
 
         const image = new Image();
@@ -73,21 +75,30 @@ class SpaceShip extends GameObject {
 }
 class Player extends SpaceShip {
     constructor(x, y, width, height, color, speed,
-                bulletColor, canvasHeight, imageSource) {
-        super(x, y, width, height, color, speed, bulletColor, canvasHeight, imageSource);
+                bulletColor, bulletRadius, canvasHeight, imageSource) {
+        super(x, y, width, height, color, speed, bulletColor, bulletRadius, canvasHeight, imageSource);
     }
 }
 class Bullet extends GameObject {
-    constructor(x, y, width, height, color, speed, dx, dy) {
+    constructor(x, y, width, height, color, speed, dx, dy, radius) {
         super(x, y, width, height, color, speed);
         // Set the bullet's x and y directions.
         this.dx = dx;
         this.dy = dy;
+        this.radius = radius;
     }
     
     update(dx, dy) {
         this.x += this.dx;
         this.y += this.dy; 
+    }
+
+    draw(ctx) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath;
     }
 }
 
@@ -131,7 +142,7 @@ var numOfEnemyLines = 4;
 var numOfEnemiesPerLine = 5;
 var enemyColor = '#00FF00';
 var playerColor = '#0099CC';
-var playerBulletColor = '#FF0000';
+var playerBulletColor = '#00FF00';
 var enemyBulletColor = '#FF0000';
 var playerSpeed = 5;
 var enemySpeed = 3;
@@ -139,6 +150,7 @@ var playerBulletSpeed = [0,-6];
 var enemyBulletSpeed = [0.5,2];
 var playerLives = 3;
 var speedIncreases = 4;
+var bulletRadius = 5;
 
 // Score table intiallization
 var scores = document.getElementById("scores")
@@ -148,12 +160,14 @@ var headerCell1 = headerRow.insertCell();
 var headerCell2 = headerRow.insertCell();
 var headerCell3 = headerRow.insertCell();
 var headerCell4 = headerRow.insertCell();
-
 headerCell1.innerHTML = "Date";
 headerCell2.innerHTML = "Score";
 headerCell3.innerHTML = "Time Elapsed";
 headerCell4.innerHTML = "Enemies Left";
 styleTable(scoreTable);
+
+const backgroundImage = new Image();
+backgroundImage.src = 'https://images.pling.com/img/00/00/63/00/40/1662284/747f5fe2a9f88f827009192082476067f10bfe1cf8dc59f69896fdde527647228d94.jpg';
 
 function styleTable(table){
     table.style.fontSize = "2vh";
@@ -220,6 +234,7 @@ function setupGame() {
                         playerColor, 
                         playerSpeed,
                         playerBulletColor,
+                        bulletRadius,
                         canvas.height,
                         './Images/gurdianPlayer.png'
     );
@@ -236,6 +251,7 @@ function setupGame() {
                                         enemyColor,
                                         enemySpeed,
                                         enemyBulletColor,
+                                        bulletRadius,
                                         canvas.height,
                                         enemyImagesDict[i]));
         }
@@ -397,9 +413,6 @@ function endGame()
     h1_div_message.textContent = endgameMessage;
 
     giveFocusToDiv(endGameDiv)
-    //cancelAnimationFrame(animationLoop);
-    //window.clearInterval(intervalTimer); 
-    //restartGame();
 }
 function resizeCanvas() {
     const windowWidth = window.innerWidth;
@@ -518,7 +531,7 @@ function updatePlayerPosition() {
     }
 }
 function restartGame(){
-    cancelAnimationFrame(animationLoop);
+    pauseGame();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     enemies.length = 0; // Remove all enemies
     lastEnemyBulletFired = undefined;
@@ -532,8 +545,7 @@ function restartGame(){
     setTimeout(() => {newGame();}, 1000); // Gives the game a second to load all assets   
 }
 function pauseGame(){
-    // cancelAnimationFrame(animationLoop);
-    cancelAnimationFrame(gameTick);
+    cancelAnimationFrame(animationLoop);
 }
 function continueGame() {
     // If equals undefined the game was never started or 
@@ -575,7 +587,6 @@ function CountdownToStart() {
     countdown.style.left = canvas.offsetLeft + canvas.width/2 - 50 + 'px';
     countdown.style.width = '100px';
     countdown.style.height = '100px';
-    countdown.style.backgroundColor = 'black';
     countdown.style.color = 'white';
     countdown.style.display = 'flex';
     countdown.style.fontSize = '15vh';
@@ -606,7 +617,6 @@ function CountdownForContinueGame(){
     countdown.style.left = canvas.offsetLeft + canvas.width/2 - 50 + 'px';
     countdown.style.width = '100px';
     countdown.style.height = '100px';
-    countdown.style.backgroundColor = 'black';
     countdown.style.color = 'white';
     countdown.style.display = 'flex';
     countdown.style.fontSize = '15vh';
@@ -628,21 +638,9 @@ function CountdownForContinueGame(){
     }, 1000);
 }
 function drawAllElements(){
-    // Draw elements
-    const img = new Image();
-    img.src = 'https://images.pling.com/img/00/00/63/00/40/1662284/747f5fe2a9f88f827009192082476067f10bfe1cf8dc59f69896fdde527647228d94.jpg';
-
-    // Wait for the image to load
-    img.onload = function() {
-        // Create a pattern with the image
-        const pattern = ctx.createPattern(img, 'repeat');
-    
-        // Set the fill style to the image pattern
-        ctx.fillStyle = pattern;
-    
-        // Fill the canvas with the image pattern
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-    };
+    const pattern = ctx.createPattern(backgroundImage, 'repeat');
+    ctx.fillStyle = pattern;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     // ctx.fillStyle = backgroundColor;
     //ctx.fillRect(0, 0, canvas.width, canvas.height);
     player.draw(ctx)
