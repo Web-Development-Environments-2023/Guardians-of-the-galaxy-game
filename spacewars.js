@@ -644,7 +644,7 @@ function drawAllElements(){
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     };
     // ctx.fillStyle = backgroundColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    //ctx.fillRect(0, 0, canvas.width, canvas.height);
     player.draw(ctx)
     $.each(enemies, function(i, enemy) {
         enemy.update(enemyDirection * enemySpeed, 0);
