@@ -202,18 +202,34 @@ end_game_pop_up_cancel_button.addEventListener('click', function() {giveFocusToD
 //Audio
 var game_audio = document.getElementById("game_audio")
 
-function playAudio(audio, volume) {
-  audio.volume = volume;
-  audio.play(); // Play the audio
+function playEnemyDeadSound(){
+  var enemy_dead_audio = document.getElementById("enemy_dead_audio")
+  enemy_dead_audio.pause(); // Stop the audio
+  enemy_dead_audio.loop = false; // Disable looping
+  enemy_dead_audio.currentTime = 0; // Reset the audio to the beginning
+  enemy_dead_audio.play(); // Play the audio
 }
 
-function pauseAudio(audio) {
-  audio.pause(); // Pause the audio
+function playPlayerDeadSound(){
+  var player_dead_audio = document.getElementById("player_dead_audio")
+  player_dead_audio.pause(); // Stop the audio
+  player_dead_audio.loop = false; // Disable looping
+  player_dead_audio.currentTime = 0; // Reset the audio to the beginning
+  player_dead_audio.play(); // Play the audio
 }
 
-function stopAudio(audio) {
-  audio.pause(); // Pause the audio
-  audio.currentTime = 0; // Reset the audio to the beginning
+function playAudio(volume) {
+  game_audio.play(); // Play the audio
+  game_audio.volume = volume;
+}
+
+function pauseAudio() {
+  game_audio.pause(); // Pause the audio
+}
+
+function stopAudio() {
+  game_audio.pause(); // Pause the audio
+  game_audio.currentTime = 0; // Reset the audio to the beginning
 }
 
 

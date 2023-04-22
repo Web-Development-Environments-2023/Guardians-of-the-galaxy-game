@@ -341,6 +341,8 @@ function gameTick() {
     lastTickTime = currentTickTime;
 }
 function playerHitEnemy(enemyIndex, bulletIndex) {
+    console.log("enemy dead sound")
+    playEnemyDeadSound()
     destroyedEnemy = enemies[enemyIndex];
     enemyLineInFormation = (destroyedEnemy.y / spaceBetweenEnemies) + 2; // From the bottom.
     scoreToAdd = enemyLineInFormation * 5;
@@ -361,8 +363,11 @@ function playerHitEnemy(enemyIndex, bulletIndex) {
     }
 }
 function enemyHitPlayer(enemyIndex, bulletIndex) {
+    console.log("player dead sound")
+    playPlayerDeadSound()
     enemy = enemies[enemyIndex];
     enemy.bullets.splice(bulletIndex, 1);
+    stopAudio(player_dead_audio)
     resetPlayerPosition();
 
     // update the lastEnemyBulletFired incase there is more than one enemy bullet in game.
@@ -602,8 +607,8 @@ function emptyScoreTable() {
         scoreTable.removeChild(scoreTable.firstChild);
 }
 function CountdownToStart() {
-    stopAudio(game_audio)
-    playAudio(game_audio, 0.5)
+    stopAudio()
+    playAudio(0.3)
     let count = 5;
     countdown.setAttribute('id', 'countdown');
     countdown.style.position = 'absolute';
@@ -634,7 +639,7 @@ function CountdownToStart() {
     }, 1000);
 }
 function CountdownForContinueGame(){
-    playAudio(game_audio, 0.5)
+    playAudio(0.3)
     let count = 5;
     countdown.setAttribute('id', 'countdown');
     countdown.style.position = 'absolute';
