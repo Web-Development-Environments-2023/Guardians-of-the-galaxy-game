@@ -199,6 +199,23 @@ end_game_pop_up_continue_button.addEventListener('click', function() {
 
 end_game_pop_up_cancel_button.addEventListener('click', function() {giveFocusToDiv(gameDiv); continueGame()})
 
+//Audio
+var game_audio = document.getElementById("game_audio")
+
+function playAudio(audio, volume) {
+  audio.volume = volume;
+  audio.play(); // Play the audio
+}
+
+function pauseAudio(audio) {
+  audio.pause(); // Pause the audio
+}
+
+function stopAudio(audio) {
+  audio.pause(); // Pause the audio
+  audio.currentTime = 0; // Reset the audio to the beginning
+}
+
 
 //Divs
 var appDivs = [logoDiv, loginDiv, registerDiv, configDiv, gameDiv, welcome_login_button, about_us_popup,
@@ -226,10 +243,8 @@ function isGameOn(){
   return gameDiv.style.display === 'block'
 }
 
-
 //Users dictionary
 var users = {"s" : "s"};
-
 
 
 function sleep(milliseconds) {
