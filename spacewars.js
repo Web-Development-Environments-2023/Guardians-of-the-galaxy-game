@@ -421,7 +421,7 @@ function endGame()
     timeElapsed = gameTimeLimit - gameRemainingTime;
     addGameToScoreTable(playerScore, Math.floor(timeElapsed / 1000), enemies.length);
     
-    if (playerLives == 0)
+    if (remainingPlayerLives == 0)
         endgameMessage = "You lost";  
     else if (enemies.length == 0)
         endgameMessage = "Champion!";  
@@ -431,7 +431,6 @@ function endGame()
         endgameMessage = "Winner!";
     else {
         endgameMessage = "End Game";
-
     }
         
 
