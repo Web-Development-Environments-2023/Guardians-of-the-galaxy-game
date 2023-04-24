@@ -28,8 +28,8 @@ class SpaceShip extends GameObject {
                 bulletColor, bulletRadius, canvasHeight, imageSource) {
         super(x, y, height, width, color, speed);
         this.canvasHeight = canvasHeight;
-        this.bulletWidth = '8';
-        this.bulletHeight = '20';
+        this.bulletWidth = '8'; //Not in use
+        this.bulletHeight = '20'; //Not in use
         this.color = color;
         this.bulletColor = bulletColor;
         this.bulletRadius = bulletRadius;
@@ -64,13 +64,12 @@ class SpaceShip extends GameObject {
         this.bullets.push(new Bullet(
             this.x + this.width / 2 - this.bulletWidth / 2,
             this.y - this.bulletHeight,
-            this.bulletWidth,
-            this.bulletHeight,
+            this.width / 7.9,
+            this.height / 3.16,
             this.bulletColor,
             enemySpeed, // BUGGGGGGGGGGGG````````````````````````````````````````````````````````````````````````````````````````
             dx,
             dy,
-            this.bulletRadius,
             1
       ));
     }
@@ -88,18 +87,17 @@ class Player extends SpaceShip {
             enemySpeed, // BUGGGGGGGGGGGG````````````````````````````````````````````````````````````````````````````````````````
             dx,
             dy,
-            this.bulletRadius,
+            this.width / 12.645,
             1
       ));
     }
 }
 class Bullet extends GameObject {
-    constructor(x, y, width, height, color, speed, dx, dy, radius, opacity) {
+    constructor(x, y, width, height, color, speed, dx, dy, opacity) {
         super(x, y, height, width, color, speed);
         // Set the bullet's x and y directions.
         this.dx = dx;
         this.dy = dy;
-        this.radius = radius;
         this.opacity = opacity;
     }
     
@@ -257,9 +255,6 @@ function setupGame() {
     playerStartingX = ((canvas.width / 2) - (canvasWidth * 0.05));
     playerStartingY = (canvas.height - (canvasHeight * 0.05));
 
-    console.log(selectText.textContent.trim());
-    console.log(playerImagesDict[selectText.textContent.trim()]);
-
 	player = new Player(
                         playerStartingX,
                         playerStartingY,
@@ -274,7 +269,7 @@ function setupGame() {
     );
     
     spaceBetweenEnemies_y = canvasHeight * 0.1;
-    spaceBetweenEnemies_x = canvasHeight * 0.3;
+    spaceBetweenEnemies_x = canvasHeight * 0.15;
     // Create enemy objects with spacing between them.
     for (var i = 0; i < numOfEnemyLines; i++) { 
         for (var j = 0; j < numOfEnemiesPerLine; j++) { 
@@ -371,7 +366,6 @@ function gameTick() {
     lastTickTime = currentTickTime;
 }
 function playerHitEnemy(enemyIndex, bulletIndex) {
-    console.log("enemy dead sound")
     playEnemyDeadSound()
     destroyedEnemy = enemies[enemyIndex];
     enemyLineInFormation = (destroyedEnemy.y / spaceBetweenEnemies_y) + 2; // From the bottom.
@@ -393,7 +387,6 @@ function playerHitEnemy(enemyIndex, bulletIndex) {
     }
 }
 function enemyHitPlayer(enemyIndex, bulletIndex) {
-    console.log("player dead sound")
     playPlayerDeadSound()
     enemy = enemies[enemyIndex];
     enemy.bullets.splice(bulletIndex, 1);
@@ -460,8 +453,11 @@ function endGame()
         endgameMessage = "You can do better";
     else if (timeLeftInSeconds <= 0 && playerScore >= 100)
         endgameMessage = "Winner!";
-    else
+    else {
         endgameMessage = "End Game";
+
+    }
+        
 
     var h1_div_message = document.querySelector('#endGameDiv h1');
     h1_div_message.textContent = endgameMessage;
