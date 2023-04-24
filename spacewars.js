@@ -202,11 +202,11 @@ function setEasyValues(){
     enemyBulletSpeed = [0.3,1.2];
 }
 function setNormalValues(){
-    enemySpeed = 4;
+    enemySpeed = 5;
     enemyBulletSpeed = [0.6,2];
 }
 function setHardValues(){
-    enemySpeed = 6;
+    enemySpeed = 7;
     enemyBulletSpeed = [0.9,3];
 }
 
@@ -586,8 +586,8 @@ function restartGame(){
     lastEnemyBulletFired = undefined;
     speedIncreases = BASE_SPEED_INCREASES;
     timerForSpeedIncreases = 0;
-    enemySpeed = ENEMY_BASE_SPEED;
-    enemyBulletSpeed = [ENEMY_BULLET_BASE_SPEED[0],ENEMY_BULLET_BASE_SPEED[1]]; 
+    // enemySpeed = ENEMY_BASE_SPEED;
+    // enemyBulletSpeed = [ENEMY_BULLET_BASE_SPEED[0],ENEMY_BULLET_BASE_SPEED[1]]; 
     playerScore = 0;
     $('#ScoreText').text(playerScore);
     setupGame();
