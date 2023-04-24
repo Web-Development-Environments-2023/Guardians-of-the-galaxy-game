@@ -210,6 +210,9 @@ styleTable(scoreTable);
 enemyImagesDict = {0:"./Images/enemy4.png",1:"./Images/enemy3.png",
                    2:"./Images/enemy2.png",3:"./Images/enemy1.png" };
 
+playerImagesDict = {"Star Lord":"Images/player1.png",
+                    "Rocket Raccoon":"Images/player2.png",
+                    "Groot":"Images/player3.png"}
 
 // window.addEventListener("load", setupGame, false);
 addEventListener("keydown", function (e) {keysDown[e.key] = true;}, false);
@@ -231,6 +234,10 @@ function setupGame() {
 	// Game objects
     playerStartingX = ((canvas.width / 2) - (canvasWidth * 0.05));
     playerStartingY = (canvas.height - (canvasHeight * 0.05));
+
+    console.log(selectText.textContent.trim());
+    console.log(playerImagesDict[selectText.textContent.trim()]);
+
 	player = new Player(
                         playerStartingX,
                         playerStartingY,
@@ -241,7 +248,7 @@ function setupGame() {
                         playerBulletColor,
                         bulletRadius,
                         canvas.height,
-                        './Images/gurdianPlayer.png'
+                        playerImagesDict[selectText.textContent.trim()]
     );
     
     spaceBetweenEnemies = canvasHeight * 0.06;
