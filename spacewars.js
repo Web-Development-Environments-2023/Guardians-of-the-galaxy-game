@@ -192,15 +192,12 @@ var bulletRadius = 5;
 var enemySpeed;
 var enemyBulletSpeed;
 
-const game_level_dict = {"Easy" : setEasyValues(),
-                        "Normal" : setNormalValues(),
-                        "Hard" : setHardValues()};
-
                                         
 function setEasyValues(){
     enemySpeed = 2;
     enemyBulletSpeed = [0.3,1.2];
     setDefaultEnemyValues()
+
 }
 
 function setNormalValues(){
@@ -215,6 +212,7 @@ function setHardValues(){
     setDefaultEnemyValues()
 }
 function setDefaultEnemyValues(){
+    console.log(enemySpeed + "   " + enemyBulletSpeed)
     const ENEMY_BASE_SPEED = enemySpeed;
     const ENEMY_BULLET_BASE_SPEED = enemyBulletSpeed;
 }
@@ -285,7 +283,17 @@ function setupGame() {
     spaceBetweenEnemies_y = canvasHeight * 0.1;
     spaceBetweenEnemies_x = canvasHeight * 0.3;
     // Create enemy objects with spacing between them.
-    game_level_dict[selectText_level.textContent.trim()]
+    game_level = selectText_level.textContent.trim();
+    if (game_level === "Easy"){
+        setEasyValues()
+    }
+    else if (game_level === "Normal"){
+        setNormalValues()
+    }
+    else if (game_level === "Hard"){
+        setHardValues()
+    }
+    console.log(selectText_level.textContent.trim())
     console.log(enemySpeed + "   " + enemyBulletSpeed)
     for (var i = 0; i < numOfEnemyLines; i++) { 
         for (var j = 0; j < numOfEnemiesPerLine; j++) { 
@@ -382,7 +390,6 @@ function gameTick() {
     lastTickTime = currentTickTime;
 }
 function playerHitEnemy(enemyIndex, bulletIndex) {
-    console.log("enemy dead sound")
     playEnemyDeadSound()
     destroyedEnemy = enemies[enemyIndex];
     enemyLineInFormation = (destroyedEnemy.y / spaceBetweenEnemies_y) + 2; // From the bottom.
@@ -404,11 +411,9 @@ function playerHitEnemy(enemyIndex, bulletIndex) {
     }
 }
 function enemyHitPlayer(enemyIndex, bulletIndex) {
-    console.log("player dead sound")
     playPlayerDeadSound()
     enemy = enemies[enemyIndex];
     enemy.bullets.splice(bulletIndex, 1);
-    stopAudio(player_dead_audio)
     resetPlayerPosition();
 
     // update the lastEnemyBulletFired incase there is more than one enemy bullet in game.
