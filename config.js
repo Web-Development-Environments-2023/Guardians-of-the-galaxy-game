@@ -12,8 +12,16 @@ configForm.addEventListener("submit", function(event) {
     timeLimit = document.getElementById("timeLimit");
     fireButton = fireButtonInput.value;
     gameTimeLimit = timeLimit.value * 60 * 1000; // Minutes to miliseconds
-    if (player !== undefined) // If player was  assigned the game started before and should restart
-        restartGame();
+    if (player !== undefined) {// If player was  assigned the game started before and should restart
+        //restartGame();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        enemies.length = 0; // Remove all enemies
+        timerForSpeedIncreases = 0;
+        enemySpeed = enemyBaseSpeed;
+        enemyBulletSpeed = [enemyBulletBaseSpeed[0],enemyBulletBaseSpeed[1]]; 
+        setupGame();
+        setTimeout(() => {newGame();}, 1000);
+    }
     else { // Game never started before so do first time setup. 
         setupGame();
         setTimeout(() => {newGame();}, 1000);

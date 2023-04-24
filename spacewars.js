@@ -173,6 +173,8 @@ var endgameMessage;
 var timeLeftInSeconds;
 var spaceBetweenEnemies_x;
 var spaceBetweenEnemies_y;
+var enemyBaseSpeed;
+var enemyBulletBaseSpeed;
 
 
 // Default Values - can be made modifiable in config. 
@@ -209,9 +211,8 @@ function setHardValues(){
     setDefaultEnemyValues()
 }
 function setDefaultEnemyValues(){
-    console.log(enemySpeed + "   " + enemyBulletSpeed)
-    const ENEMY_BASE_SPEED = enemySpeed;
-    const ENEMY_BULLET_BASE_SPEED = enemyBulletSpeed;
+    enemyBaseSpeed = enemySpeed;
+    enemyBulletBaseSpeed = enemyBulletSpeed;
 }
 
 
@@ -238,9 +239,10 @@ enemyImagesDict = {0:"./Images/enemy4.png",1:"./Images/enemy3.png",
 
 playerImagesDict = {"Star Lord":"Images/player1.png",
                     "Rocket Raccoon":"Images/player2.png",
-                    "Groot":"Images/player3.png"}
+                    "Groot":"Images/player3.png",
+                    "Select Your Player":"Images/player3.png"}
 
-// window.addEventListener("load", setupGame, false);
+window.addEventListener("load", setupGame, false);
 addEventListener("keydown", function (e) {keysDown[e.key] = true;}, false);
 addEventListener("keyup", function (e) {delete keysDown[e.key];}, false);
 
@@ -260,6 +262,7 @@ function setupGame() {
 	// Game objects
     playerStartingX = ((canvas.width / 2) - (canvasWidth * 0.05));
     playerStartingY = (canvas.height - (canvasHeight * 0.05));
+    setGameLevel();
 
 	player = new Player(
                         playerStartingX,
@@ -273,25 +276,10 @@ function setupGame() {
                         canvas.height,
                         playerImagesDict[selectText.textContent.trim()]
     );
-    
+
+    // Create enemy objects with spacing between them.
     spaceBetweenEnemies_y = canvasHeight * 0.1;
     spaceBetweenEnemies_x = canvasHeight * 0.15;
-    // Create enemy objects with spacing between them.
-    game_level = selectText_level.textContent.trim();
-    if (game_level === "Easy"){
-        setEasyValues()
-    }
-    else if (game_level === "Normal"){
-        setNormalValues()
-    }
-    else if (game_level === "Hard"){
-        setHardValues()
-    }
-    else{
-        setNormalValues()
-    }
-    console.log(selectText_level.textContent.trim())
-    console.log(enemySpeed + "   " + enemyBulletSpeed)
     for (var i = 0; i < numOfEnemyLines; i++) { 
         for (var j = 0; j < numOfEnemiesPerLine; j++) { 
             enemies.push(new SpaceShip(
@@ -604,13 +592,14 @@ function updatePlayerPosition() {
 }
 function restartGame(){
     pauseGame();
+    setGameLevel();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     enemies.length = 0; // Remove all enemies
     lastEnemyBulletFired = undefined;
     speedIncreases = BASE_SPEED_INCREASES;
     timerForSpeedIncreases = 0;
-    enemySpeed = ENEMY_BASE_SPEED;
-    enemyBulletSpeed = [ENEMY_BULLET_BASE_SPEED[0],ENEMY_BULLET_BASE_SPEED[1]]; 
+    enemySpeed = enemyBaseSpeed;
+    enemyBulletSpeed = [enemyBulletBaseSpeed[0],enemyBulletBaseSpeed[1]]; 
     playerScore = 0;
     $('#ScoreText').text(playerScore);
     setupGame();
@@ -769,4 +758,19 @@ function styleTable(table){
     header.style.verticalAlign = "middle";
     header.style.backgroundColor = "black"; // Add background color for headers
   }
+}
+function setGameLevel(){
+    game_level = selectText_level.textContent.trim();
+    if (game_level === "Easy"){
+        setEasyValues()
+    }
+    else if (game_level === "Normal"){
+        setNormalValues()
+    }
+    else if (game_level === "Hard"){
+        setHardValues()
+    }
+    else{
+        setNormalValues()
+    }
 }

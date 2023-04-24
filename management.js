@@ -281,7 +281,7 @@ function isGameOn(){
 }
 
 //Users dictionary
-var users = {"s" : "s"};
+var users = {"s" : "s", "p" : "testuser" };
 
 
 function sleep(milliseconds) {
