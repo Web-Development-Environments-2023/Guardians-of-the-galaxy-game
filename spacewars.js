@@ -239,7 +239,8 @@ enemyImagesDict = {0:"./Images/enemy4.png",1:"./Images/enemy3.png",
 
 playerImagesDict = {"Star Lord":"Images/player1.png",
                     "Rocket Raccoon":"Images/player2.png",
-                    "Groot":"Images/player3.png"}
+                    "Groot":"Images/player3.png",
+                    "Select Your Player":"Images/player3.png"}
 
 // window.addEventListener("load", setupGame, false);
 addEventListener("keydown", function (e) {keysDown[e.key] = true;}, false);
