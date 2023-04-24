@@ -176,7 +176,6 @@ var spaceBetweenEnemies_y;
 var enemyBaseSpeed;
 var enemyBulletBaseSpeed;
 
-
 // Default Values - can be made modifiable in config. 
 var numOfEnemyLines = 4;
 var numOfEnemiesPerLine = 5;
@@ -191,31 +190,6 @@ var speedIncreases = 4;
 var bulletRadius = 5;
 var enemySpeed;
 var enemyBulletSpeed;
-
-                                        
-function setEasyValues(){
-    enemySpeed = 2;
-    enemyBulletSpeed = [0.3,1.2];
-    setDefaultEnemyValues()
-}
-
-function setNormalValues(){
-    enemySpeed = 5;
-    enemyBulletSpeed = [0.6,2];
-    setDefaultEnemyValues()
-}
-
-function setHardValues(){
-    enemySpeed = 7;
-    enemyBulletSpeed = [0.9,3];
-    setDefaultEnemyValues()
-}
-function setDefaultEnemyValues(){
-    enemyBaseSpeed = enemySpeed;
-    enemyBulletBaseSpeed = enemyBulletSpeed;
-}
-
-
 
 // Score table intiallization
 var scores = document.getElementById("scores")
@@ -263,7 +237,6 @@ function setupGame() {
     playerStartingX = ((canvas.width / 2) - (canvasWidth * 0.05));
     playerStartingY = (canvas.height - (canvasHeight * 0.05));
     setGameLevel();
-
 	player = new Player(
                         playerStartingX,
                         playerStartingY,
@@ -276,7 +249,6 @@ function setupGame() {
                         canvas.height,
                         playerImagesDict[selectText.textContent.trim()]
     );
-
     // Create enemy objects with spacing between them.
     spaceBetweenEnemies_y = canvasHeight * 0.1;
     spaceBetweenEnemies_x = canvasHeight * 0.15;
@@ -304,8 +276,6 @@ function setupGame() {
         heartImg.style.width = "2vh";
         livesElement.appendChild(heartImg);
     }
-
-
     for(let i = 0; i < 200; i++) {
         backgroundStars.push(new RoundBullet(
             Math.random() * canvas.width,
@@ -318,10 +288,8 @@ function setupGame() {
             0.5
       ));
     }
-
 	// Reset keysDown
 	keysDown = {};
-
 }
 // Called when the game starts.
 function newGame()
@@ -773,4 +741,23 @@ function setGameLevel(){
     else{
         setNormalValues()
     }
+}
+function setEasyValues(){
+    enemySpeed = 2;
+    enemyBulletSpeed = [0.4,2];
+    setDefaultEnemyValues()
+}
+function setNormalValues(){
+    enemySpeed = 5;
+    enemyBulletSpeed = [0.7,3];
+    setDefaultEnemyValues()
+}
+function setHardValues(){
+    enemySpeed = 7;
+    enemyBulletSpeed = [1,4];
+    setDefaultEnemyValues()
+}
+function setDefaultEnemyValues(){
+    enemyBaseSpeed = enemySpeed;
+    enemyBulletBaseSpeed = enemyBulletSpeed;
 }
