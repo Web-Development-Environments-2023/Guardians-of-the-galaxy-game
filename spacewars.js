@@ -139,8 +139,8 @@ class RoundBullet extends GameObject {
 }
 
 const backgroundColor = '#000000'
-const ENEMY_BASE_SPEED = 3;
-const ENEMY_BULLET_BASE_SPEED = [0.5,2];
+// const ENEMY_BASE_SPEED = 3;
+// const ENEMY_BULLET_BASE_SPEED = [0.5,2];
 const BASE_SPEED_INCREASES = 4;
 const MIN_CANVAS_WIDTH = 1366;
 const MIN_CANVAS_HEIGHT = 768;
@@ -198,14 +198,23 @@ const game_level_dict = {"Easy" : setEasyValues(),
 function setEasyValues(){
     enemySpeed = 2;
     enemyBulletSpeed = [0.3,1.2];
+    setDefaultEnemyValues()
 }
+
 function setNormalValues(){
-    enemySpeed = 4;
+    enemySpeed = 5;
     enemyBulletSpeed = [0.6,2];
+    setDefaultEnemyValues()
 }
+
 function setHardValues(){
-    enemySpeed = 6;
+    enemySpeed = 7;
     enemyBulletSpeed = [0.9,3];
+    setDefaultEnemyValues()
+}
+function setDefaultEnemyValues(){
+    const ENEMY_BASE_SPEED = enemySpeed;
+    const ENEMY_BULLET_BASE_SPEED = enemyBulletSpeed;
 }
 
 
@@ -271,6 +280,8 @@ function setupGame() {
     spaceBetweenEnemies_y = canvasHeight * 0.1;
     spaceBetweenEnemies_x = canvasHeight * 0.15;
     // Create enemy objects with spacing between them.
+    game_level_dict[selectText_level.textContent.trim()]
+    console.log(enemySpeed + "   " + enemyBulletSpeed)
     for (var i = 0; i < numOfEnemyLines; i++) { 
         for (var j = 0; j < numOfEnemiesPerLine; j++) { 
             enemies.push(new SpaceShip(

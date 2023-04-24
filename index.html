@@ -183,14 +183,14 @@
         <h1>Configure The Game</h1>
         <form method="post" id="configForm" onsubmit="return false">
           <div class="txt_field">
-            <input type="text" autocomplete="off" id="fireButtonInput" name="fireButtonInput" maxlength="1" pattern="[A-Za-z\s]" required value=" ">
+            <input type="text" autocomplete="off" id="fireButtonInput" name="fireButtonInput" maxlength="1" pattern="[A-Za-z\s]" required value="s">
             <span></span>
-            <label>Choose a button to fire at enemies (default 'Space'):</label>
+            <label id="fireButton_text">Choose a button to fire at enemies:</label>
           </div>
           <div class="txt_field">
             <input type="number" autocomplete="off" id="timeLimit" name="timeLimit" min="2" max="20" required value="5">
             <span></span>
-            <label>Choose game time limit (minimum 2 minutes):</label>
+            <label id="timeLimit_text">Choose game time limit (minimum 2 minutes):</label>
           </div>
           <div class="selector">
             <div id="selectField">
