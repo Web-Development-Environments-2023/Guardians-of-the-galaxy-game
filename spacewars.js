@@ -211,7 +211,6 @@ function setHardValues(){
     setDefaultEnemyValues()
 }
 function setDefaultEnemyValues(){
-    console.log(enemySpeed + "   " + enemyBulletSpeed)
     enemyBaseSpeed = enemySpeed;
     enemyBulletBaseSpeed = enemyBulletSpeed;
 }
@@ -384,7 +383,6 @@ function playerHitEnemy(enemyIndex, bulletIndex) {
     $('#ScoreText').text(playerScore);
 
     // Remove hit enemy and the bullet.
-    console.log("enemy removed:",enemyIndex);
     enemies.splice(enemyIndex, 1);
     player.bullets.splice(bulletIndex, 1);
     if (enemies.length == 0)
@@ -557,7 +555,6 @@ function checkBulletsCollisions() {
     player.bullets.forEach(function(bullet, i) {
         $(enemies).each(function(j, enemy) {
             if (enemy.collidesWith(bullet)) {
-                console.log("bullet:",i,"enemy:",j)
                 playerHitEnemy(j, i);
                 return false; 
             }

@@ -16,6 +16,9 @@ configForm.addEventListener("submit", function(event) {
         //restartGame();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         enemies.length = 0; // Remove all enemies
+        timerForSpeedIncreases = 0;
+        enemySpeed = enemyBaseSpeed;
+        enemyBulletSpeed = [enemyBulletBaseSpeed[0],enemyBulletBaseSpeed[1]]; 
         setupGame();
         setTimeout(() => {newGame();}, 1000);
     }
