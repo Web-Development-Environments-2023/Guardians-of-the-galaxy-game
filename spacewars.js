@@ -241,7 +241,7 @@ playerImagesDict = {"Star Lord":"Images/player1.png",
                     "Groot":"Images/player3.png",
                     "Select Your Player":"Images/player3.png"}
 
-// window.addEventListener("load", setupGame, false);
+window.addEventListener("load", setupGame, false);
 addEventListener("keydown", function (e) {keysDown[e.key] = true;}, false);
 addEventListener("keyup", function (e) {delete keysDown[e.key];}, false);
 
