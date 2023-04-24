@@ -24,7 +24,13 @@ configForm.addEventListener("submit", function(event) {
 });
 
 function restartSettings(){
-    fireButton.value = " ";
-    timeLimit.value = 5
-    selectText.innerHTML = "Select Your Player"
+    var fireButtonLabel = document.getElementById('fireButtonInput');
+    var timeLimitLabel = document.getElementById('timeLimit');
+    var playerLabel = document.getElementById('selectText');
+    var playerLabel_level = document.getElementById('selectText_level');
+
+    fireButtonLabel.value = "s";
+    timeLimitLabel.value = "5";
+    playerLabel.innerText = "Select Your Player";
+    playerLabel_level.innerText = "Game Level";
 }
