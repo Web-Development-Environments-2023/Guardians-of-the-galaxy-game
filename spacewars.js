@@ -195,7 +195,6 @@ function setEasyValues(){
     enemySpeed = 2;
     enemyBulletSpeed = [0.3,1.2];
     setDefaultEnemyValues()
-
 }
 
 function setNormalValues(){
@@ -287,6 +286,9 @@ function setupGame() {
     }
     else if (game_level === "Hard"){
         setHardValues()
+    }
+    else{
+        setNormalValues()
     }
     console.log(selectText_level.textContent.trim())
     console.log(enemySpeed + "   " + enemyBulletSpeed)
