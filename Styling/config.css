@@ -20,7 +20,7 @@
     font-weight: bold;
     padding: 0 0 1vw 0;
     border-bottom:  0.2vh solid silver;
-    font-size: 6vh;
+    font-size: 4vh;
 }
 .center_config form{
     padding: 0 5%;
@@ -29,17 +29,21 @@
 }
 
 .selector{
-    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: inherit;
 }
 
 #selectField {
     width: 100%;
+    height: 2vh;
     background-color: #c43885;
     padding: 2vw 3vw;
-    margin-bottom: 4vh;
+    margin-bottom: 2vh;
     box-sizing: border-box;
     border-radius: 6px;
-    font-size: 3vh;
+    font-size: 2.5vh;
     font-weight: bold;
     margin-bottom: 3vh;
     display: flex;
@@ -55,28 +59,74 @@
 #list{
     width: 100%;
     border-radius: 6px;
+    /* height: 22vh; */
     overflow: hidden;
 }
 .options{
     width: 100%;
     background-color: #747f81;
-    padding: 3vw 0 3vh 15vh;
+    padding: 2vw 0 3vh 15vh;
     list-style: none;
     cursor: pointer;
     box-sizing: border-box;
     position: relative;
-    font-size: 3vh;
+    font-size: 2vh;
     font-weight: bold;
 }
 .options img{
     width: 6vh;
     position: absolute;
-    top: 3vh;
-    left: 5vh;
+    top: 1vh;
+    left: 1vh;
 }
 .options:hover{
-    background: rgba(57, 117, 67, 0.7);
+    background: rgba(75, 189, 94, 0.7);
 }
+
+#selectField_level {
+    width: 35%;
+    height: 2vh;
+    background-color: #c43885;
+    padding: 2vw 3vw;
+    margin-bottom: 2vh;
+    box-sizing: border-box;
+    border-radius: 6px;
+    font-size: 3vh;
+    font-weight: bold;
+    margin-bottom: 3vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    /* background: rgba(255, 255, 255, 0.7); */
+}
+#selectField_level img{
+    width: 3vh;
+    transition: transform 0.5s;
+}
+#list_level{
+    width: 100%;
+    border-radius: 6px;
+    /* height: 22vh; */
+    overflow: hidden;
+}
+.options_level{
+    width: 100%;
+    background-color: #747f81;
+    padding: 2vw 0 3vh 15vh;
+    list-style: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    position: relative;
+    font-size: 2vh;
+    font-weight: bold;
+}
+.options_level:hover{
+    background: rgba(75, 189, 94, 0.7);
+}
+
+
+
 .hide{
     visibility: hidden;
 }

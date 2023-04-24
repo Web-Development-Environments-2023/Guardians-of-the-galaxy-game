@@ -173,7 +173,9 @@ var animationLoop;
 var remainingPlayerLives;
 var endgameMessage;
 var timeLeftInSeconds;
-var spaceBetweenEnemies;
+var spaceBetweenEnemies_x;
+var spaceBetweenEnemies_y;
+
 
 // Default Values - can be made modifiable in config. 
 var numOfEnemyLines = 4;
@@ -244,13 +246,14 @@ function setupGame() {
                         './Images/gurdianPlayer.png'
     );
     
-    spaceBetweenEnemies = canvasHeight * 0.06;
+    spaceBetweenEnemies_y = canvasHeight * 0.1;
+    spaceBetweenEnemies_x = canvasHeight * 0.3;
     // Create enemy objects with spacing between them.
     for (var i = 0; i < numOfEnemyLines; i++) { 
         for (var j = 0; j < numOfEnemiesPerLine; j++) { 
             enemies.push(new SpaceShip(
-                                        spaceBetweenEnemies + j * spaceBetweenEnemies,
-                                        spaceBetweenEnemies + i * spaceBetweenEnemies,
+                                        spaceBetweenEnemies_x + j * spaceBetweenEnemies_x,
+                                        spaceBetweenEnemies_y + i * spaceBetweenEnemies_y,
                                         20,
                                         20,
                                         enemyColor,
@@ -344,7 +347,7 @@ function playerHitEnemy(enemyIndex, bulletIndex) {
     console.log("enemy dead sound")
     playEnemyDeadSound()
     destroyedEnemy = enemies[enemyIndex];
-    enemyLineInFormation = (destroyedEnemy.y / spaceBetweenEnemies) + 2; // From the bottom.
+    enemyLineInFormation = (destroyedEnemy.y / spaceBetweenEnemies_y) + 2; // From the bottom.
     scoreToAdd = enemyLineInFormation * 5;
     playerScore += scoreToAdd;
     $('#ScoreText').text(playerScore);

@@ -23,6 +23,8 @@ configForm.addEventListener("submit", function(event) {
     // newGame();
 });
 
-
-
-// scoresButton.addEventListener("click", function() {giveFocusToDiv(endGameDiv)})
+function restartSettings(){
+    fireButton.value = " ";
+    timeLimit.value = 5
+    selectText.innerHTML = "Select Your Player"
+}

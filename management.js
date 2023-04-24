@@ -9,6 +9,7 @@ const welcome_register_button = document.getElementById("welcome_register_button
 const footer = document.getElementById("footer");
 
 homeButton.addEventListener("click", function() {
+  restartSettings()
   if (isGameOn()){
     pauseGame(); 
     last_div_clicked = logoDiv; 
@@ -24,6 +25,7 @@ homeButton.addEventListener("click", function() {
 loginButton.addEventListener("click", function() {
   loginUsername.value = ""
   loginPassword.value = ""
+  restartSettings()
 
   if (isGameOn()){
     pauseGame(); 
@@ -45,6 +47,7 @@ welcome_login_button.addEventListener("click", function() {
 }, false);
 
 registerButton.addEventListener("click", function() {
+  restartSettings()
   if (isGameOn()){
     pauseGame(); 
     last_div_clicked = registerDiv; 
@@ -76,7 +79,7 @@ function loginUser(username, password) {
   if (users[username] && users[username] === password) {
     console.log("Login successful.");
     var config_h1 = document.querySelector('#configDiv h1'); // Select the h1 element
-    config_h1.textContent = 'Welcome ' + username + "! Please configure the game settings and start playing.";
+    config_h1.innerHTML = 'Welcome ' + username + "! <br>Setup the game and start playing.";
     loginButton.textContent = "Log out";
     giveFocusToDiv(login_pop_up);
   } else {
@@ -176,6 +179,7 @@ exitBtn.addEventListener("click", function() {
   loginUsername.value = ""
   loginPassword.value = ""
   loginButton.textContent = "Login";
+  restartSettings()
   giveFocusToDiv(logoDiv)
 }, false);
 
