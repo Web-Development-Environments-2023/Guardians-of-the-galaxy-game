@@ -185,12 +185,32 @@ var playerColor = '#0099CC';
 var playerBulletColor = '#00FF00';
 var enemyBulletColor = '#FF0000';
 var playerSpeed = 5;
-var enemySpeed = 3;
 var playerBulletSpeed = [0,-6];
-var enemyBulletSpeed = [0.5,2];
 var playerLives = 3;
 var speedIncreases = 4;
 var bulletRadius = 5;
+var enemySpeed;
+var enemyBulletSpeed;
+
+const game_level_dict = {"Easy" : setEasyValues(),
+                        "Normal" : setNormalValues(),
+                        "Hard" : setHardValues()};
+
+                                        
+function setEasyValues(){
+    enemySpeed = 2;
+    enemyBulletSpeed = [0.3,1.2];
+}
+function setNormalValues(){
+    enemySpeed = 4;
+    enemyBulletSpeed = [0.6,2];
+}
+function setHardValues(){
+    enemySpeed = 6;
+    enemyBulletSpeed = [0.9,3];
+}
+
+
 
 // Score table intiallization
 var scores = document.getElementById("scores")
@@ -630,6 +650,7 @@ function CountdownToStart() {
         countdown.innerText = count;
         count--;
         if (count < 0) {
+            countdown.innerText = "5"
             clearInterval(countdownInterval);
             countdown.remove();
             playerScore = 0;
@@ -661,6 +682,7 @@ function CountdownForContinueGame(){
         countdown.innerText = count;
         count--;
         if (count < 0) {
+            countdown.innerText = "5"
             clearInterval(countdownInterval);
             countdown.remove();
             currentTickTime = Date.now();

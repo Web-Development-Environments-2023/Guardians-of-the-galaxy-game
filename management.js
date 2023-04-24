@@ -131,16 +131,25 @@ function registerUser(username, password, repeat) {
 const aboutButton = document.getElementById('aboutButton');
 const about_us_popup = document.getElementById('aboutDiv');
 const closeButton = document.getElementById('closeButton');
+var isGamePaused = false;
 
 window.addEventListener("click", function(event) {
   // Close the pop-up dialog when clicking outside of it
   if (about_us_popup.style.display === 'block' && event.target !== aboutDiv && event.target !== aboutButton && !about_us_popup.contains(event.target)){
+    if (isGamePaused){
+      isGamePaused = false;
+      continueGame()
+    }
     about_us_popup.style.display = "none";  
   }
 });
 
 // Show the popup when the "About us" button is clicked
 aboutButton.addEventListener('click', function() {
+  if (isGameOn()){
+    pauseGame()
+    isGamePaused = true;
+  }
   last_div_clicked = aboutButton;
   about_us_popup.style.display="block"
   // giveFocusToDiv(about_us_popup)
@@ -148,12 +157,20 @@ aboutButton.addEventListener('click', function() {
 
 // Hide the popup when the close button is clicked
 closeButton.addEventListener('click', function() {
+  if (isGamePaused){
+    isGamePaused = false;
+    continueGame()
+  }
   about_us_popup.style.display = 'none';
 });
 
 window.addEventListener("keydown", function(event) {
   // Close the pop-up dialog when pressing the Escape key
   if (event.key === "Escape") {
+    if (isGamePaused){
+      isGamePaused = false;
+      continueGame()
+    }
     about_us_popup.style.display = "none";
   }
 });
