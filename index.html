@@ -183,9 +183,9 @@
         <h1>Configure The Game</h1>
         <form method="post" id="configForm" onsubmit="return false">
           <div class="txt_field">
-            <input type="text" autocomplete="off" id="fireButtonInput" name="fireButtonInput" maxlength="1" pattern="[A-Za-z\s]" required value="a">
+            <input type="text" autocomplete="off" id="fireButtonInput" name="fireButtonInput" maxlength="1" pattern="[A-Za-z\s]" required value=" ">
             <span></span>
-            <label>Choose a button to fire at enemies:</label>
+            <label>Choose a button to fire at enemies (default 'Space'):</label>
           </div>
           <div class="txt_field">
             <input type="number" autocomplete="off" id="timeLimit" name="timeLimit" min="2" max="20" required value="5">
@@ -211,6 +211,23 @@
                 <p>Groot</p>
               </li>
             </ul>
+
+            <div id="selectField_level">
+              <p id="selectText_level">Game Level</p>
+              <img src="Images/arrow.png" id="arrowIcon_level">
+            </div>
+            <ul id="list_level" class="hide">
+              <li class="options_level">
+                <p>Easy</p>
+              </li>
+              <li class="options_level">
+                <p>Normal</p>
+              </li>
+              <li class="options_level">
+                <p>Hard</p>
+              </li>
+            </ul>
+
           </div>
           <input type="submit" id="startGameButton" value="Start Game">
         </form>
@@ -234,6 +251,28 @@
             selectText.innerHTML = this.textContent;
             list.classList.toggle("hide")
             arrowIcon.classList.toggle("rotate")
+          }
+        }
+      </script>
+
+      <script>
+        var selectField_level = document.getElementById("selectField_level")
+        var selectText_level = document.getElementById("selectText_level")
+        var options_level = document.getElementsByClassName("options_level")
+        var list_level = document.getElementById("list_level")
+        var arrowIcon_level = document.getElementById("arrowIcon_level")
+        
+
+        selectField_level.onclick = function(){
+          list_level.classList.toggle("hide")
+          arrowIcon_level.classList.toggle("rotate")
+        }
+
+        for (option of options_level){
+          option.onclick = function(){
+            selectText_level.innerHTML = this.textContent;
+            list_level.classList.toggle("hide")
+            arrowIcon_level.classList.toggle("rotate")
           }
         }
       </script>

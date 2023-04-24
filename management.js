@@ -9,6 +9,7 @@ const welcome_register_button = document.getElementById("welcome_register_button
 const footer = document.getElementById("footer");
 
 homeButton.addEventListener("click", function() {
+  restartSettings()
   if (isGameOn()){
     pauseGame(); 
     last_div_clicked = logoDiv; 
@@ -24,6 +25,7 @@ homeButton.addEventListener("click", function() {
 loginButton.addEventListener("click", function() {
   loginUsername.value = ""
   loginPassword.value = ""
+  restartSettings()
 
   if (isGameOn()){
     pauseGame(); 
@@ -45,6 +47,7 @@ welcome_login_button.addEventListener("click", function() {
 }, false);
 
 registerButton.addEventListener("click", function() {
+  restartSettings()
   if (isGameOn()){
     pauseGame(); 
     last_div_clicked = registerDiv; 
@@ -76,7 +79,7 @@ function loginUser(username, password) {
   if (users[username] && users[username] === password) {
     console.log("Login successful.");
     var config_h1 = document.querySelector('#configDiv h1'); // Select the h1 element
-    config_h1.textContent = 'Welcome ' + username + "! Please configure the game settings and start playing.";
+    config_h1.innerHTML = 'Welcome ' + username + "! <br>Setup the game and start playing.";
     loginButton.textContent = "Log out";
     giveFocusToDiv(login_pop_up);
   } else {
@@ -128,16 +131,25 @@ function registerUser(username, password, repeat) {
 const aboutButton = document.getElementById('aboutButton');
 const about_us_popup = document.getElementById('aboutDiv');
 const closeButton = document.getElementById('closeButton');
+var isGamePaused = false;
 
 window.addEventListener("click", function(event) {
   // Close the pop-up dialog when clicking outside of it
   if (about_us_popup.style.display === 'block' && event.target !== aboutDiv && event.target !== aboutButton && !about_us_popup.contains(event.target)){
+    if (isGamePaused){
+      isGamePaused = false;
+      continueGame()
+    }
     about_us_popup.style.display = "none";  
   }
 });
 
 // Show the popup when the "About us" button is clicked
 aboutButton.addEventListener('click', function() {
+  if (isGameOn()){
+    pauseGame()
+    isGamePaused = true;
+  }
   last_div_clicked = aboutButton;
   about_us_popup.style.display="block"
   // giveFocusToDiv(about_us_popup)
@@ -145,12 +157,20 @@ aboutButton.addEventListener('click', function() {
 
 // Hide the popup when the close button is clicked
 closeButton.addEventListener('click', function() {
+  if (isGamePaused){
+    isGamePaused = false;
+    continueGame()
+  }
   about_us_popup.style.display = 'none';
 });
 
 window.addEventListener("keydown", function(event) {
   // Close the pop-up dialog when pressing the Escape key
   if (event.key === "Escape") {
+    if (isGamePaused){
+      isGamePaused = false;
+      continueGame()
+    }
     about_us_popup.style.display = "none";
   }
 });
@@ -176,6 +196,7 @@ exitBtn.addEventListener("click", function() {
   loginUsername.value = ""
   loginPassword.value = ""
   loginButton.textContent = "Login";
+  restartSettings()
   giveFocusToDiv(logoDiv)
 }, false);
 

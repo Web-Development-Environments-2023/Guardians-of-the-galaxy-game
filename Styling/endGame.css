@@ -58,7 +58,3 @@
 #endGameDiv button:hover {
     background: green;
 }
-
-
-/* scoresButton.addEventListener("click", function() {var end_game_div_h3 = document.querySelector('#endGameDiv h3'); // Select the h1 element
-    end_game_div_h3.textContent = 'Hello ' + username + "! Here you can see all your scores in the game."; giveFocusToDiv(endGameDiv)}) */

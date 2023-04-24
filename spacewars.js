@@ -173,7 +173,9 @@ var animationLoop;
 var remainingPlayerLives;
 var endgameMessage;
 var timeLeftInSeconds;
-var spaceBetweenEnemies;
+var spaceBetweenEnemies_x;
+var spaceBetweenEnemies_y;
+
 
 // Default Values - can be made modifiable in config. 
 var numOfEnemyLines = 4;
@@ -183,12 +185,32 @@ var playerColor = '#0099CC';
 var playerBulletColor = '#00FF00';
 var enemyBulletColor = '#FF0000';
 var playerSpeed = 5;
-var enemySpeed = 3;
 var playerBulletSpeed = [0,-6];
-var enemyBulletSpeed = [0.5,2];
 var playerLives = 3;
 var speedIncreases = 4;
 var bulletRadius = 5;
+var enemySpeed;
+var enemyBulletSpeed;
+
+const game_level_dict = {"Easy" : setEasyValues(),
+                        "Normal" : setNormalValues(),
+                        "Hard" : setHardValues()};
+
+                                        
+function setEasyValues(){
+    enemySpeed = 2;
+    enemyBulletSpeed = [0.3,1.2];
+}
+function setNormalValues(){
+    enemySpeed = 4;
+    enemyBulletSpeed = [0.6,2];
+}
+function setHardValues(){
+    enemySpeed = 6;
+    enemyBulletSpeed = [0.9,3];
+}
+
+
 
 // Score table intiallization
 var scores = document.getElementById("scores")
@@ -251,13 +273,14 @@ function setupGame() {
                         playerImagesDict[selectText.textContent.trim()]
     );
     
-    spaceBetweenEnemies = canvasHeight * 0.06;
+    spaceBetweenEnemies_y = canvasHeight * 0.1;
+    spaceBetweenEnemies_x = canvasHeight * 0.3;
     // Create enemy objects with spacing between them.
     for (var i = 0; i < numOfEnemyLines; i++) { 
         for (var j = 0; j < numOfEnemiesPerLine; j++) { 
             enemies.push(new SpaceShip(
-                                        spaceBetweenEnemies + j * spaceBetweenEnemies,
-                                        spaceBetweenEnemies + i * spaceBetweenEnemies,
+                                        spaceBetweenEnemies_x + j * spaceBetweenEnemies_x,
+                                        spaceBetweenEnemies_y + i * spaceBetweenEnemies_y,
                                         20,
                                         20,
                                         enemyColor,
@@ -351,7 +374,7 @@ function playerHitEnemy(enemyIndex, bulletIndex) {
     console.log("enemy dead sound")
     playEnemyDeadSound()
     destroyedEnemy = enemies[enemyIndex];
-    enemyLineInFormation = (destroyedEnemy.y / spaceBetweenEnemies) + 2; // From the bottom.
+    enemyLineInFormation = (destroyedEnemy.y / spaceBetweenEnemies_y) + 2; // From the bottom.
     scoreToAdd = enemyLineInFormation * 5;
     playerScore += scoreToAdd;
     $('#ScoreText').text(playerScore);
@@ -634,6 +657,7 @@ function CountdownToStart() {
         countdown.innerText = count;
         count--;
         if (count < 0) {
+            countdown.innerText = "5"
             clearInterval(countdownInterval);
             countdown.remove();
             playerScore = 0;
@@ -665,6 +689,7 @@ function CountdownForContinueGame(){
         countdown.innerText = count;
         count--;
         if (count < 0) {
+            countdown.innerText = "5"
             clearInterval(countdownInterval);
             countdown.remove();
             currentTickTime = Date.now();
