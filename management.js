@@ -81,6 +81,7 @@ function loginUser(username, password) {
     var config_h1 = document.querySelector('#configDiv h1'); // Select the h1 element
     config_h1.innerHTML = 'Welcome ' + username + "! <br>Setup the game and start playing.";
     loginButton.textContent = "Log out";
+    emptyScoreTable();
     giveFocusToDiv(login_pop_up);
   } else {
     console.log("Invalid username or password.");
